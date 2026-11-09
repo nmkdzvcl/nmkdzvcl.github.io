@@ -273,16 +273,34 @@
   }
   .status-item {
     display: flex; align-items: center; gap: 10px;
-    font-size: 13px;
+    font-size: 13px; min-width: 0;
   }
   .status-icon {
     font-size: 15px; width: 28px; height: 28px; border-radius: 6px;
     background: rgba(255, 255, 255, 0.04);
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
+    flex-shrink: 0; position: relative; overflow: hidden;
   }
+  .status-icon img { width: 100%; height: 100%; object-fit: cover; }
   .status-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
   .status-value { font-weight: 600; color: var(--text); }
+
+  /* Equalizer Animation for Music */
+  .equalizer {
+    display: inline-flex; align-items: flex-end; gap: 2px; height: 11px; margin-left: 6px; vertical-align: middle;
+  }
+  .eq-bar {
+    width: 2px; background: var(--ac); border-radius: 1px;
+    animation: eq-pulse 0.9s ease-in-out infinite alternate;
+  }
+  .eq-bar:nth-child(1) { height: 4px; animation-delay: 0.1s; }
+  .eq-bar:nth-child(2) { height: 10px; animation-delay: 0.3s; }
+  .eq-bar:nth-child(3) { height: 6px; animation-delay: 0.2s; }
+  .eq-bar:nth-child(4) { height: 11px; animation-delay: 0.4s; }
+  @keyframes eq-pulse {
+    0% { height: 3px; }
+    100% { height: 11px; }
+  }
 
   /* Interactive CLI Area */
   .cli-wrapper {
@@ -855,11 +873,19 @@
             <div class="status-value">Hạng D / Top 1 U14</div>
           </div>
         </div>
-        <div class="status-item">
-          <div class="status-icon">🎵</div>
-          <div>
-            <div class="status-label">Đang nghe</div>
-            <div class="status-value" id="currentTrack">Đang tải playlist...</div>
+        <div class="status-item" id="musicStatusItem">
+          <div class="status-icon" id="musicIcon">🎵</div>
+          <div style="min-width:0;flex:1;">
+            <div class="status-label" style="display:flex;align-items:center;">
+              <span id="musicLabelText">Đang nghe</span>
+              <span class="equalizer" id="eqBars">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </span>
+            </div>
+            <div class="status-value" id="currentTrack" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="Đang tải playlist...">Đang tải playlist...</div>
           </div>
         </div>
       </div>
@@ -1312,7 +1338,7 @@
 <!-- ─── JavaScript Engine ─── -->
 <script>
 // ════════════════════════════════════════════════════
-//  1. PLAYLIST & STATUS
+//  1. PLAYLIST, SPOTIFY & LANYARD REALTIME
 // ════════════════════════════════════════════════════
 const playlist = [
   'Một Triệu Như Một — Đen Vâu',
@@ -1323,7 +1349,67 @@ const playlist = [
   'Có Chắc Yêu Là Đây — Sơn Tùng M-TP',
   'Đưa Em Về Nhà — GREY D'
 ];
-document.getElementById('currentTrack').textContent = playlist[Math.floor(Math.random() * playlist.length)];
+
+let discordUserId = localStorage.getItem('nmk_discord_id') || '';
+let lanyardPollTimer = null;
+
+function renderFallbackTrack() {
+  const track = playlist[Math.floor(Math.random() * playlist.length)];
+  const trackEl = document.getElementById('currentTrack');
+  const labelEl = document.getElementById('musicLabelText');
+  const iconEl = document.getElementById('musicIcon');
+  if (trackEl) {
+    trackEl.textContent = track;
+    trackEl.title = track;
+  }
+  if (labelEl) labelEl.textContent = 'Đang nghe';
+  if (iconEl) iconEl.innerHTML = '🎵';
+}
+
+async function checkLanyardPresence() {
+  if (!discordUserId) {
+    renderFallbackTrack();
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://api.lanyard.rest/v1/users/${discordUserId}`);
+    const json = await res.json();
+    if (json.success && json.data) {
+      const data = json.data;
+      const trackEl = document.getElementById('currentTrack');
+      const labelEl = document.getElementById('musicLabelText');
+      const iconEl = document.getElementById('musicIcon');
+
+      if (data.listening_to_spotify && data.spotify) {
+        const song = data.spotify.song;
+        const artist = data.spotify.artist;
+        const art = data.spotify.album_art_url;
+        labelEl.textContent = 'Spotify Live';
+        trackEl.textContent = `${song} — ${artist}`;
+        trackEl.title = `${song} — ${artist} (${data.spotify.album})`;
+        if (art && iconEl) {
+          iconEl.innerHTML = `<img src="${art}" alt="Album Art">`;
+        }
+      } else {
+        renderFallbackTrack();
+        if (data.discord_status && data.discord_status !== 'offline') {
+          labelEl.textContent = `Discord ${data.discord_status.toUpperCase()}`;
+        }
+      }
+    } else {
+      renderFallbackTrack();
+    }
+  } catch (e) {
+    renderFallbackTrack();
+  }
+}
+
+// Bấm vào status nhạc để đổi bài hoặc xem
+document.getElementById('musicStatusItem')?.addEventListener('click', () => {
+  renderFallbackTrack();
+  showToast('Đã đổi bài hát trong playlist!');
+});
 
 // ════════════════════════════════════════════════════
 //  2. SCROLL PROGRESS
@@ -1639,11 +1725,24 @@ function executeCLI(rawCmd) {
   const cmd = rawCmd.trim().toLowerCase();
   printCLILine('❯ ' + rawCmd, 'cli-line-cmd');
 
+  if (cmd.startsWith('discord ')) {
+    const id = cmd.replace('discord ', '').trim();
+    if (id) {
+      discordUserId = id;
+      localStorage.setItem('nmk_discord_id', id);
+      checkLanyardPresence();
+      printCLILine(`Đã kết nối Discord User ID: ${id}. Đang đồng bộ Spotify & trạng thái Lanyard!`, 'cli-line-info');
+    }
+    return;
+  }
+
   switch (cmd) {
     case 'help':
       printCLILine(`DANH SÁCH LỆNH KHẢ DỤNG:
   • neofetch    : Thông số cá nhân phong cách Linux
   • cf          : Kiểm tra stats Codeforces realtime
+  • spotify     : Thông tin bài hát đang nghe
+  • discord <id>: Đồng bộ Discord User ID lấy Spotify live
   • pong        : Khởi chạy mini-game Bóng bàn 2D
   • matrix      : Kích hoạt hiệu ứng mưa mã xanh Matrix
   • cv          : Xem và in hồ sơ cá nhân
@@ -1655,6 +1754,11 @@ function executeCLI(rawCmd) {
   • contact     : Thông tin liên hệ nhanh
   • sudo        : Thử quyền quản trị viên
   • clear       : Xóa sạch màn hình terminal`, 'cli-line-res');
+      break;
+
+    case 'spotify':
+      const currentSong = document.getElementById('currentTrack')?.textContent || 'Chưa tải';
+      printCLILine(`🎵 Đang phát: ${currentSong}`, 'cli-line-info');
       break;
 
     case 'about':
@@ -1941,6 +2045,9 @@ window.addEventListener('load', () => {
   switchSnippet('fastio');
   // Load Codeforces data
   loadCodeforcesData();
+  // Init Lanyard & Spotify
+  checkLanyardPresence();
+  setInterval(checkLanyardPresence, 15000);
 });
 </script>
 </body>
