@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nguyễn Minh Khôi (NMK) — Chuyên Tin & Athlete</title>
+<meta name="description" content="Portfolio của Nguyễn Minh Khôi — Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn Vũng Tàu, Competitive Programmer, VĐV Bóng Bàn U14 Vũng Tàu.">
+<meta name="keywords" content="Nguyễn Minh Khôi, NMK, Chuyên Tin Lê Quý Đôn Vũng Tàu, Codeforces, Lập trình thi đấu, Bóng bàn">
+<meta name="author" content="Nguyễn Minh Khôi">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nguyễn Minh Khôi (NMK) — Chuyên Tin & Athlete">
+<meta property="og:description" content="Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn Vũng Tàu · Competitive Programmer · Top 1 Bóng Bàn U14 Vũng Tàu.">
+<meta property="og:image" content="avatar.jpg">
+<meta property="og:locale" content="vi_VN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nguyễn Minh Khôi (NMK) — Chuyên Tin & Athlete">
+<meta name="twitter:description" content="Học sinh chuyên Tin THPT Chuyên Lê Quý Đôn Vũng Tàu · Thuật toán · Bóng Bàn">
+<meta name="twitter:image" content="avatar.jpg">
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230D1117'/><text y='.75em' x='50%' font-size='62' text-anchor='middle' fill='%234FD1C5' font-family='monospace' font-weight='800'>N</text></svg>">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #090D12;
+    --bg-secondary: #0D1117;
+    --panel: #131922;
+    --panel-hover: #17202B;
+    --panel-border: #212B38;
+    --panel-border-bright: rgba(79, 209, 197, 0.35);
+    --text: #E6EDF3;
+    --text-secondary: #9DA7B3;
+    --muted: #6B7685;
+    --accent: #4FD1C5;
+    --accent-glow: rgba(79, 209, 197, 0.22);
+    --purple: #A371F7;
+    --purple-glow: rgba(163, 113, 247, 0.2);
+    --ac: #3FB950;
+    --tle: #F85149;
+    --amber: #F2994A;
+    --blue: #58A6FF;
+    --radius-sm: 6px;
+    --radius: 12px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 7px; height: 7px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--panel-border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Ambient Grid & Glow */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(79, 209, 197, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79, 209, 197, 0.025) 1px, transparent 1px);
+    background-size: 36px 36px;
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% -5%, rgba(79, 209, 197, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 45% at 95% 90%, rgba(163, 113, 247, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 40% at 5% 50%, rgba(88, 166, 255, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Reading Progress Bar */
+  #scrollProgress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    width: 0%; z-index: 200; transition: width 0.1s linear;
+  }
+
+  /* Navbar */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    background: rgba(9, 13, 18, 0.82);
+    border-bottom: 1px solid rgba(33, 43, 56, 0.7);
+    padding: 12px 20px;
+    transition: all 0.2s ease;
+  }
+  .nav-inner {
+    max-width: 860px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text); text-decoration: none; font-weight: 700;
+    font-size: 14px;
+  }
+  .nav-badge {
+    background: rgba(79, 209, 197, 0.12);
+    color: var(--accent);
+    padding: 3px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 700;
+    border: 1px solid rgba(79, 209, 197, 0.25);
+  }
+  .nav-links {
+    display: flex; gap: 18px; font-size: 13px; align-items: center;
+    flex-wrap: wrap;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nav-links a::before { content: "#"; color: var(--muted); margin-right: 3px; }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  .nav-terminal-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    color: var(--accent);
+    padding: 5px 10px; border-radius: 6px;
+    cursor: pointer; font-size: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+  }
+  .nav-terminal-btn:hover {
+    background: rgba(79, 209, 197, 0.12);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* Main Container */
+  .container {
+    position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto;
+    padding: 36px 20px 100px;
+  }
+
+  /* ─── Hero Terminal Window ─── */
+  .terminal {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(79, 209, 197, 0.05),
+      0 24px 70px rgba(0, 0, 0, 0.6),
+      0 0 50px rgba(79, 209, 197, 0.03);
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s;
+  }
+  .terminal:hover {
+    border-color: rgba(79, 209, 197, 0.3);
+  }
+  .terminal-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    background: rgba(23, 31, 41, 0.95);
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .terminal-dots { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-red { background: #FF5F56; box-shadow: 0 0 6px rgba(255, 95, 86, 0.4); }
+  .dot-yellow { background: #FFBD2E; box-shadow: 0 0 6px rgba(255, 189, 46, 0.4); }
+  .dot-green { background: #27C93F; box-shadow: 0 0 6px rgba(39, 201, 63, 0.4); }
+  .terminal-title {
+    color: var(--muted); font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .terminal-status-indicator {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ac);
+    box-shadow: 0 0 8px var(--ac);
+    animation: pulse 2s infinite ease-in-out;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .terminal-body {
+    padding: 26px 28px;
+    font-size: 14.5px;
+  }
+
+  /* Avatar & Header in Terminal */
+  .hero-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 20px; margin-bottom: 18px;
+  }
+  .hero-intro { flex: 1; min-width: 0; }
+  .terminal-prompt-line {
+    font-size: 13.5px; color: var(--muted); margin-bottom: 8px;
+  }
+  .prompt-user { color: var(--accent); font-weight: 600; }
+  .prompt-path { color: var(--purple); }
+  .prompt-cmd { color: var(--text); }
+
+  .hero-name {
+    font-size: 38px; font-weight: 800;
+    line-height: 1.15;
+    margin: 8px 0;
+    background: linear-gradient(135deg, #FFFFFF 0%, #A5F3FC 40%, #A371F7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+  .hero-subtitle {
+    font-size: 15px; color: var(--text-secondary);
+    min-height: 24px; margin-bottom: 4px;
+  }
+  .hero-tagline {
+    font-size: 13.5px; color: var(--muted);
+  }
+
+  .avatar-container {
+    position: relative; width: 92px; height: 92px; flex-shrink: 0;
+  }
+  .avatar-ring {
+    position: absolute; inset: -3px; border-radius: 18px;
+    background: conic-gradient(var(--accent) 0deg, var(--purple) 180deg, var(--accent) 360deg);
+    animation: spin 6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .avatar-inner {
+    position: absolute; inset: 2px; background: var(--panel);
+    border-radius: 16px; overflow: hidden;
+  }
+  .avatar-img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.4s ease;
+  }
+  .avatar-container:hover .avatar-img { transform: scale(1.08); }
+  .avatar-fallback {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: #0D1117; font-weight: 800; font-size: 28px;
+  }
+
+  /* Status Chips */
+  .status-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px; margin: 20px 0;
+    padding: 16px; background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: var(--radius-sm);
+  }
+  .status-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+  }
+  .status-icon {
+    font-size: 15px; width: 28px; height: 28px; border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .status-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .status-value { font-weight: 600; color: var(--text); }
+
+  /* Interactive CLI Area */
+  .cli-wrapper {
+    margin-top: 18px;
+    background: #090D13;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .cli-output {
+    max-height: 220px; overflow-y: auto;
+    font-size: 13px; line-height: 1.6;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+  }
+  .cli-output:empty { display: none; }
+  .cli-line { margin-bottom: 4px; word-break: break-word; }
+  .cli-line-cmd { color: var(--accent); font-weight: 600; }
+  .cli-line-res { color: var(--text); white-space: pre-wrap; }
+  .cli-line-err { color: var(--tle); }
+  .cli-line-info { color: var(--blue); }
+
+  .cli-input-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px;
+  }
+  .cli-prompt-sym { color: var(--accent); font-weight: 700; }
+  .cli-input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--text); font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; caret-color: var(--accent);
+  }
+  .cli-input::placeholder { color: var(--muted); font-size: 12px; }
+
+  .cli-quick-chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+    padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.07);
+    align-items: center;
+  }
+  .cli-chip-label { font-size: 11px; color: var(--muted); margin-right: 4px; }
+  .cli-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    color: var(--text-secondary);
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 11.5px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .cli-chip:hover {
+    background: rgba(79, 209, 197, 0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Hero Action Buttons */
+  .hero-actions {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 8px;
+    font-size: 13.5px; font-weight: 600; text-decoration: none;
+    cursor: pointer; transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: rgba(79, 209, 197, 0.14);
+    border-color: rgba(79, 209, 197, 0.35);
+    color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: rgba(79, 209, 197, 0.24);
+    box-shadow: 0 0 20px rgba(79, 209, 197, 0.2);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--panel-border);
+    color: var(--text);
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* ─── Standard Section ─── */
+  .section {
+    margin-top: 36px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .section:hover {
+    border-color: rgba(79, 209, 197, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .section-tag {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 6px;
+    display: inline-block;
+  }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .section-title { font-size: 22px; font-weight: 800; color: var(--text); }
+  .section-subtitle { font-size: 13px; color: var(--muted); }
+
+  /* ─── Problem A: About Me (Input / Output / Constraints) ─── */
+  .problem-box {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+  }
+  .spec-row {
+    display: grid; grid-template-columns: 130px 1fr;
+    gap: 8px 16px; font-size: 14px; margin-bottom: 8px;
+  }
+  .spec-row:last-child { margin-bottom: 0; }
+  .spec-key {
+    color: var(--accent); font-weight: 600;
+  }
+  .spec-val { color: var(--text-secondary); }
+  .about-story {
+    font-size: 15px; color: var(--text-secondary); line-height: 1.8;
+  }
+  .about-story p { margin-bottom: 12px; }
+  .about-story p:last-child { margin-bottom: 0; }
+  .highlight-text { color: var(--text); font-weight: 600; }
+
+  /* ─── Problem B: Dual Mode (Code & Table Tennis) ─── */
+  .dual-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 18px; margin-top: 16px;
+  }
+  .dual-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 22px;
+    transition: all 0.25s ease;
+    display: flex; flex-direction: column;
+  }
+  .dual-card.brain:hover {
+    border-color: var(--accent);
+    background: rgba(79, 209, 197, 0.03);
+    transform: translateY(-2px);
+  }
+  .dual-card.reflex:hover {
+    border-color: var(--amber);
+    background: rgba(242, 153, 74, 0.03);
+    transform: translateY(-2px);
+  }
+  .dual-badge {
+    align-self: flex-start;
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 11.5px; font-weight: 700; margin-bottom: 12px;
+  }
+  .badge-brain { background: rgba(79, 209, 197, 0.12); color: var(--accent); }
+  .badge-reflex { background: rgba(242, 153, 74, 0.14); color: var(--amber); }
+
+  .dual-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .dual-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; flex: 1; }
+  .dual-list { list-style: none; font-size: 13px; color: var(--muted); }
+  .dual-list li { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .dual-list li strong { color: var(--text); }
+
+  /* ─── Problem C: Codeforces Deep Dive Dashboard ─── */
+  .cf-dashboard {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .cf-header-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 14px; margin-bottom: 20px;
+  }
+  .cf-handle-wrap { display: flex; align-items: center; gap: 12px; }
+  .cf-avatar-img {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--panel);
+  }
+  .cf-handle { font-size: 20px; font-weight: 800; color: var(--text); text-decoration: none; }
+  .cf-handle:hover { color: var(--accent); }
+  .cf-rank-pill {
+    font-size: 12px; font-weight: 700; padding: 2px 10px;
+    border-radius: 12px; text-transform: capitalize;
+  }
+
+  .cf-stat-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px; margin-bottom: 22px;
+  }
+  .cf-stat-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px; padding: 12px 14px; text-align: center;
+  }
+  .cf-stat-num { font-size: 24px; font-weight: 800; line-height: 1.2; margin-bottom: 2px; }
+  .cf-stat-desc { font-size: 11.5px; color: var(--muted); }
+
+  /* SVG Rating Chart */
+  .chart-container {
+    background: #090D12;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 14px;
+    position: relative;
+  }
+  .chart-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; font-size: 12px; color: var(--muted);
+  }
+  .svg-chart {
+    width: 100%; height: 160px; overflow: visible; display: block;
+  }
+  .chart-tooltip {
+    position: absolute; pointer-events: none;
+    background: rgba(13, 17, 23, 0.95);
+    border: 1px solid var(--accent);
+    padding: 6px 10px; border-radius: 6px;
+    font-size: 11.5px; color: var(--text);
+    white-space: nowrap; opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 10;
+    transform: translate(-50%, -120%);
+  }
+
+  /* ─── Problem D: Skills Matrix ─── */
+  .skill-group { margin-bottom: 20px; }
+  .skill-group:last-child { margin-bottom: 0; }
+  .skill-group-title {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .skill-group-title::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.06);
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(27, 34, 43, 0.7);
+    border: 1px solid var(--panel-border);
+    color: var(--text);
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: default;
+  }
+  .tag:hover {
+    border-color: var(--accent);
+    background: rgba(79, 209, 197, 0.08);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .tag-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* ─── Problem E: Algorithm Snippets & CP Hub ─── */
+  .snippets-wrap {
+    border: 1px solid var(--panel-border);
+    border-radius: 10px; overflow: hidden;
+    background: #090D13;
+  }
+  .snippets-tabs {
+    display: flex; overflow-x: auto;
+    background: rgba(19, 25, 34, 0.9);
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .snip-tab {
+    padding: 10px 16px; border: none; background: transparent;
+    color: var(--muted); font-size: 12.5px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    border-right: 1px solid var(--panel-border);
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .snip-tab:hover { color: var(--text); background: rgba(255, 255, 255, 0.02); }
+  .snip-tab.active {
+    color: var(--accent); background: rgba(79, 209, 197, 0.08);
+    border-bottom: 2px solid var(--accent);
+  }
+  .snip-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 16px; font-size: 12px; color: var(--muted);
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .snip-copy-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--panel-border);
+    color: var(--text-secondary);
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 11.5px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .snip-copy-btn:hover {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .snip-code {
+    padding: 16px; overflow-x: auto;
+    font-size: 12.5px; line-height: 1.6;
+    color: #C9D1D9; max-height: 320px;
+  }
+
+  /* ─── Problem F: Timeline & Achievements ─── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 9px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--purple), transparent);
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-marker {
+    position: absolute; left: -28px; top: 4px;
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--accent); background: var(--bg);
+    box-shadow: 0 0 10px var(--accent-glow);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tl-marker.purple { border-color: var(--purple); box-shadow: 0 0 10px var(--purple-glow); }
+  .tl-marker-inner { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .tl-marker.purple .tl-marker-inner { background: var(--purple); }
+
+  .tl-year {
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .tl-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tl-sub { font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; }
+  .verdict-tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; margin-top: 6px;
+  }
+  .verdict-ac { background: rgba(63, 185, 80, 0.15); color: var(--ac); border: 1px solid rgba(63, 185, 80, 0.3); }
+  .verdict-pending { background: rgba(163, 113, 247, 0.15); color: var(--purple); border: 1px solid rgba(163, 113, 247, 0.3); }
+  .verdict-amber { background: rgba(242, 153, 74, 0.15); color: var(--amber); border: 1px solid rgba(242, 153, 74, 0.3); }
+
+  /* ─── Problem G: Contact & Socials ─── */
+  .contact-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .contact-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px; padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .contact-item:hover {
+    background: rgba(79, 209, 197, 0.05);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .contact-left { display: flex; align-items: center; gap: 12px; }
+  .contact-icon { font-size: 18px; }
+  .contact-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+  .contact-val { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .contact-action { font-size: 11px; color: var(--muted); transition: color 0.15s; }
+  .contact-item:hover .contact-action { color: var(--accent); }
+
+  .socials-row {
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .social-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(27, 34, 43, 0.8);
+    border: 1px solid var(--panel-border);
+    color: var(--text); padding: 8px 16px;
+    border-radius: 8px; font-size: 13.5px; font-weight: 600;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .social-pill:hover {
+    border-color: var(--accent);
+    background: rgba(79, 209, 197, 0.1);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    text-align: center; color: var(--muted);
+    font-size: 13px; margin-top: 60px;
+    padding-top: 24px; border-top: 1px solid var(--panel-border);
+  }
+  .footer-sub { font-size: 11.5px; margin-top: 6px; color: rgba(107, 118, 133, 0.7); }
+
+  /* ─── Modal: Quick Profile / CV Printable ─── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-window {
+    background: var(--panel);
+    border: 1px solid var(--panel-border-bright);
+    border-radius: var(--radius-lg);
+    width: 100%; max-width: 680px; max-height: 88vh;
+    overflow-y: auto; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+    display: flex; flex-direction: column;
+  }
+  .modal-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--panel-border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-title { font-size: 18px; font-weight: 800; color: var(--text); }
+  .modal-close {
+    background: transparent; border: none; font-size: 24px;
+    color: var(--muted); cursor: pointer; line-height: 1;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 24px; font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+  .modal-footer {
+    padding: 16px 24px; border-top: 1px solid var(--panel-border);
+    display: flex; justify-content: flex-end; gap: 10px;
+  }
+
+  /* ─── Modal: Pong Mini Game ─── */
+  #pongCanvas {
+    background: #000; border: 2px solid var(--accent);
+    border-radius: 8px; display: block; margin: 0 auto;
+    max-width: 100%; touch-action: none;
+  }
+  .pong-ctrl-hint {
+    text-align: center; font-size: 12px; color: var(--muted); margin-top: 10px;
+  }
+
+  /* ─── Toast Notification ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 10000;
+    background: rgba(19, 25, 34, 0.95);
+    border: 1px solid var(--accent);
+    color: var(--text); padding: 12px 18px;
+    border-radius: 8px; font-size: 13.5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    display: flex; align-items: center; gap: 8px;
+    transform: translateY(100px); opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ─── Matrix Rain Canvas ─── */
+  #matrixCanvas {
+    position: fixed; inset: 0; z-index: 9999;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  #matrixCanvas.active { opacity: 0.92; pointer-events: auto; }
+
+  /* ─── Media Queries ─── */
+  @media (max-width: 720px) {
+    .container { padding: 20px 14px 80px; }
+    .hero-header { flex-direction: column-reverse; align-items: flex-start; }
+    .avatar-container { width: 76px; height: 76px; margin-bottom: 6px; }
+    .hero-name { font-size: 28px; }
+    .dual-grid { grid-template-columns: 1fr; }
+    .section { padding: 20px 18px; }
+    .nav-links { display: none; } /* Mobile simplified */
+  }
+
+  /* Print Styles for CV */
+  @media print {
+    body { background: #fff !important; color: #000 !important; }
+    .nav, .terminal-actions, .cli-wrapper, #matrixCanvas, #scrollProgress, .modal-footer, .nav-terminal-btn { display: none !important; }
+    .section, .terminal { border: none !important; box-shadow: none !important; background: transparent !important; }
+    .text, .spec-val, .about-story { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+<canvas id="matrixCanvas"></canvas>
+
+<!-- ─── Navbar ─── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand mono">
+      <span style="color:var(--accent);">nmk</span>@lqdon-vt
+      <span class="nav-badge">v2.6</span>
+    </a>
+    <div class="nav-links mono">
+      <a href="#about">about</a>
+      <a href="#dual">dual-mode</a>
+      <a href="#codeforces">codeforces</a>
+      <a href="#skills">skills</a>
+      <a href="#snippets">snippets</a>
+      <a href="#achievements">journey</a>
+      <a href="#contact">contact</a>
+    </div>
+    <button class="nav-terminal-btn mono" onclick="focusCLI()">
+      <span>⌨</span> CLI Mode
+    </button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ─── Hero Terminal Window ─── -->
+  <div class="terminal">
+    <div class="terminal-topbar">
+      <div class="terminal-dots">
+        <div class="dot dot-red" title="Close"></div>
+        <div class="dot dot-yellow" title="Minimize"></div>
+        <div class="dot dot-green" title="Expand"></div>
+      </div>
+      <div class="terminal-title mono">
+        <span class="terminal-status-indicator"></span>
+        <span>nguyenminhkhoi@vungtau: ~ (c++20)</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);" class="mono">UTF-8</div>
+    </div>
+
+    <div class="terminal-body">
+      <div class="hero-header">
+        <div class="hero-intro">
+          <div class="terminal-prompt-line mono">
+            <span class="prompt-user">visitor@nmk</span>:<span class="prompt-path">~</span>$ <span class="prompt-cmd">whoami --details</span>
+          </div>
+          <h1 class="hero-name mono" id="heroName">Nguyễn Minh Khôi</h1>
+          <div class="hero-subtitle mono" id="heroSubtitle">Học sinh chuyên Tin — THPT Chuyên Lê Quý Đôn, Vũng Tàu</div>
+          <div class="hero-tagline mono">Competitive Programmer · C++ · Top 1 Bóng Bàn U14 Vũng Tàu</div>
+        </div>
+
+        <div class="avatar-container">
+          <div class="avatar-ring"></div>
+          <div class="avatar-inner">
+            <img src="avatar.jpg" alt="Nguyễn Minh Khôi" class="avatar-img" onerror="this.parentElement.innerHTML='<div class=\'avatar-fallback\'>NMK</div>'">
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Status Chips -->
+      <div class="status-grid mono">
+        <div class="status-item">
+          <div class="status-icon">🏫</div>
+          <div>
+            <div class="status-label">Trường lớp</div>
+            <div class="status-value">Lớp 10 Chuyên Tin</div>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-icon">⚡</div>
+          <div>
+            <div class="status-label">Vũ khí chính</div>
+            <div class="status-value">C++ / Algorithms</div>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-icon">🏓</div>
+          <div>
+            <div class="status-label">Thể thao</div>
+            <div class="status-value">Hạng D / Top 1 U14</div>
+          </div>
+        </div>
+        <div class="status-item">
+          <div class="status-icon">🎵</div>
+          <div>
+            <div class="status-label">Đang nghe</div>
+            <div class="status-value" id="currentTrack">Đang tải playlist...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive CLI Input -->
+      <div class="cli-wrapper mono" id="cliWrapper">
+        <div class="cli-output" id="cliOutput"></div>
+        <div class="cli-input-row">
+          <span class="cli-prompt-sym">❯</span>
+          <input type="text" id="cliInput" class="cli-input" placeholder="Gõ lệnh (thử 'help', 'neofetch', 'cf', 'pong', 'matrix')..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="cli-quick-chips">
+          <span class="cli-chip-label">Lệnh nhanh:</span>
+          <span class="cli-chip" onclick="executeCLI('help')">help</span>
+          <span class="cli-chip" onclick="executeCLI('neofetch')">neofetch</span>
+          <span class="cli-chip" onclick="executeCLI('cf')">cf</span>
+          <span class="cli-chip" onclick="executeCLI('pong')">pong</span>
+          <span class="cli-chip" onclick="executeCLI('matrix')">matrix</span>
+          <span class="cli-chip" onclick="executeCLI('cv')">cv</span>
+          <span class="cli-chip" onclick="executeCLI('clear')">clear</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="hero-actions mono">
+        <a href="#contact" class="btn btn-primary">📬 Kết nối với mình</a>
+        <button class="btn btn-secondary" onclick="openCVModal()">📄 Xem hồ sơ (CV)</button>
+        <button class="btn btn-secondary" onclick="executeCLI('pong')">🏓 Thử thách Pong</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Problem A: About Me ─── -->
+  <section class="section" id="about">
+    <div class="section-tag mono">Problem A // Introduction</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Về Bản Thân</h2>
+        <div class="section-subtitle mono">Input: Đam mê thuật toán · Output: Không ngừng tiến bộ</div>
+      </div>
+    </div>
+
+    <div class="problem-box mono">
+      <div class="spec-row">
+        <div class="spec-key">INPUT:</div>
+        <div class="spec-val">Một chiếc máy tính, tình yêu dành cho thuật toán và bàn bóng bàn quen thuộc ở phố biển Vũng Tàu.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">OUTPUT:</div>
+        <div class="spec-val">Một học sinh chuyên Tin giàu năng lượng, luôn tìm kiếm giải pháp tối ưu cho từng dòng code và từng pha bóng.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">CONSTRAINTS:</div>
+        <div class="spec-val">Time Limit: 24h/ngày · Space Limit: Không giới hạn khả năng tiếp thu kiến thức mới.</div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-key">VERDICT:</div>
+        <div class="spec-val" style="color:var(--ac); font-weight:700;">Accepted (AC) — Luôn giữ ngọn lửa nhiệt huyết.</div>
+      </div>
+    </div>
+
+    <div class="about-story">
+      <p>
+        Mình là <span class="highlight-text">Nguyễn Minh Khôi</span>, học sinh khóa 2025–2028 chuyên Tin tại 
+        <strong>THPT Chuyên Lê Quý Đôn — Vũng Tàu</strong>. 
+        Hành trình của mình bắt đầu từ Toán học ở bậc THCS rồi bén duyên sang Tin học lập trình. Với mình, mỗi bài toán thuật toán là một câu đố logic đòi hỏi sự bền bỉ, tính chặt chẽ và khả năng tư duy đột phá.
+      </p>
+      <p>
+        Bên cạnh thế giới của những thuật toán \(O(N \log N)\) và các kỳ contest Codeforces lúc 21:35 tối, mình còn là một 
+        <span class="highlight-text">Vận động viên Bóng bàn</span> (Vô địch U14 Vũng Tàu 2024, xếp hạng D Vũng Tàu) và một người yêu thích sáng tạo nội dung đời sống / phong cách. Mình tin rằng việc cân bằng giữa tư duy logic máy tính và phản xạ thể thao sắc bén là chìa khóa để phát triển toàn diện.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── Problem B: Dual Mode (Code & Table Tennis) ─── -->
+  <section class="section" id="dual">
+    <div class="section-tag mono">Problem B // Dual Architecture</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Dual Mode: Logic & Phản Xạ</h2>
+        <div class="section-subtitle mono">Sự giao thoa giữa tư duy lập trình và bản lĩnh thể thao</div>
+      </div>
+    </div>
+
+    <div class="dual-grid">
+      <!-- Brain Mode -->
+      <div class="dual-card brain">
+        <div class="dual-badge badge-brain mono">MODE 01 // BRAIN</div>
+        <h3 class="dual-title">Competitive Programming</h3>
+        <p class="dual-desc">
+          Tư duy phân tích cấu trúc bài toán, tối ưu hóa độ phức tạp thuật toán và rèn luyện tâm lý vững vàng trước áp lực thời gian trong các kỳ thi contest.
+        </p>
+        <ul class="dual-list mono">
+          <li><span>🔹</span> <strong>Ngôn ngữ:</strong> C++20 (STL, Fast I/O)</li>
+          <li><span>🔹</span> <strong>Trọng tâm:</strong> DP, Segment Tree, Graph, DSU</li>
+          <li><span>🔹</span> <strong>Nền tảng:</strong> Codeforces (nmk11cpy), VNOI</li>
+          <li><span>🔹</span> <strong>Mục tiêu:</strong> Specialist ➔ Expert</li>
+        </ul>
+      </div>
+
+      <!-- Reflex Mode -->
+      <div class="dual-card reflex">
+        <div class="dual-badge badge-reflex mono">MODE 02 // REFLEX</div>
+        <h3 class="dual-title">Bóng Bàn (Table Tennis)</h3>
+        <p class="dual-desc">
+          Tốc độ phản xạ trong phần trăm giây, khả năng phán đoán đường bóng và duy trì sự bình tĩnh khi bước vào những set đấu quyết định.
+        </p>
+        <ul class="dual-list mono">
+          <li><span>🏓</span> <strong>Thành tích:</strong> Top 1 U14 Vũng Tàu (2024)</li>
+          <li><span>🏓</span> <strong>Phân hạng:</strong> Hạng D Vũng Tàu</li>
+          <li><span>🏓</span> <strong>Lối đánh:</strong> Tấn công thuận tay, phản công nhanh</li>
+          <li><span>🏓</span> <strong>Giá trị:</strong> Thể lực dẻo dai & sự kiên trì</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Problem C: Codeforces Dashboard ─── -->
+  <section class="section" id="codeforces">
+    <div class="section-tag mono">Problem C // Realtime Metrics</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Codeforces Live Stats</h2>
+        <div class="section-subtitle mono">Dữ liệu thi đấu cập nhật trực tiếp từ Codeforces API</div>
+      </div>
+      <a href="https://codeforces.com/profile/nmk11cpy" target="_blank" class="btn btn-secondary mono" style="font-size:12px;padding:6px 12px;">
+        Profile ↗
+      </a>
+    </div>
+
+    <div class="cf-dashboard">
+      <div class="cf-header-bar">
+        <div class="cf-handle-wrap">
+          <img id="cfAvatar" class="cf-avatar-img" src="avatar.jpg" alt="nmk11cpy">
+          <div>
+            <a href="https://codeforces.com/profile/nmk11cpy" target="_blank" class="cf-handle mono" id="cfHandle">nmk11cpy</a>
+            <div style="font-size:12px;color:var(--muted);margin-top:2px;" class="mono" id="cfSubInfo">THPT Chuyên Lê Quý Đôn</div>
+          </div>
+        </div>
+        <div>
+          <span class="cf-rank-pill mono" id="cfRankBadge" style="background:rgba(0,128,0,0.15);color:#008000;border:1px solid rgba(0,128,0,0.3);">
+            Pupil
+          </span>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="cf-stat-cards mono">
+        <div class="cf-stat-card">
+          <div class="cf-stat-num" id="cfRatingVal" style="color:#008000;">1382</div>
+          <div class="cf-stat-desc">Current Rating</div>
+        </div>
+        <div class="cf-stat-card">
+          <div class="cf-stat-num" id="cfMaxRatingVal" style="color:#03A89E;">1404</div>
+          <div class="cf-stat-desc">Peak Rating (Specialist)</div>
+        </div>
+        <div class="cf-stat-card">
+          <div class="cf-stat-num" id="cfContestCount">7</div>
+          <div class="cf-stat-desc">Contests Joined</div>
+        </div>
+        <div class="cf-stat-card">
+          <div class="cf-stat-num" id="cfSolvedCount" style="color:var(--ac);">100+</div>
+          <div class="cf-stat-desc">Problems Solved</div>
+        </div>
+      </div>
+
+      <!-- Rating Growth Chart -->
+      <div class="chart-container">
+        <div class="chart-header mono">
+          <span>📈 RATING HISTORY (CONTEST PERFORMANCE)</span>
+          <span id="chartTrend" style="color:var(--ac);">Peak: 1404 (+862)</span>
+        </div>
+        <div style="position:relative;">
+          <svg id="cfRatingSvg" class="svg-chart" viewBox="0 0 600 160" preserveAspectRatio="none">
+            <!-- Grid lines & curve dynamically injected -->
+          </svg>
+          <div class="chart-tooltip mono" id="chartTooltip"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Problem D: Skills Matrix ─── -->
+  <section class="section" id="skills">
+    <div class="section-tag mono">Problem D // Skillset</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Kỹ Năng & Công Cụ</h2>
+        <div class="section-subtitle mono">Những công nghệ và phương pháp luận mình sử dụng hàng ngày</div>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title mono">
+        <span>⚙️ Ngôn Ngữ & Môi Trường</span>
+      </div>
+      <div class="tags">
+        <span class="tag"><span class="tag-dot" style="background:#00599C;"></span> C++20 (STL)</span>
+        <span class="tag"><span class="tag-dot" style="background:#F7DF1E;"></span> JavaScript (ES6+)</span>
+        <span class="tag"><span class="tag-dot" style="background:#3776AB;"></span> Python</span>
+        <span class="tag"><span class="tag-dot" style="background:#007ACC;"></span> VS Code</span>
+        <span class="tag"><span class="tag-dot" style="background:#F05032;"></span> Git / GitHub</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title mono">
+        <span>🧠 Cấu Trúc Dữ Liệu & Thuật Toán</span>
+      </div>
+      <div class="tags">
+        <span class="tag">Segment Tree (Cây phân đoạn)</span>
+        <span class="tag">Disjoint Set Union (DSU)</span>
+        <span class="tag">Quy hoạch động (Dynamic Programming)</span>
+        <span class="tag">Thuật toán Đồ thị (Dijkstra, BFS/DFS)</span>
+        <span class="tag">Binary Search (Tìm kiếm nhị phân)</span>
+        <span class="tag">Lý thuyết số & Modulo</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title mono">
+        <span>🏆 Thể Thao & Kỹ Năng Mềm</span>
+      </div>
+      <div class="tags">
+        <span class="tag">🏓 Bóng Bàn (Hạng D Vũng Tàu)</span>
+        <span class="tag">⚡ Phản xạ & Chiến thuật thi đấu</span>
+        <span class="tag">🤝 Làm việc nhóm & Peer Programming</span>
+        <span class="tag">🎥 KOC / Sáng tạo nội dung TikTok</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Problem E: Algorithm Snippets Hub ─── -->
+  <section class="section" id="snippets">
+    <div class="section-tag mono">Problem E // CP Templates</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Kho Thuật Toán & Template C++</h2>
+        <div class="section-subtitle mono">Những cấu trúc dữ liệu chuẩn được tối ưu cho các kỳ thi CP</div>
+      </div>
+    </div>
+
+    <div class="snippets-wrap mono">
+      <div class="snippets-tabs" id="snipTabs">
+        <button class="snip-tab active" data-snip="fastio" onclick="switchSnippet('fastio', this)">⚡ Fast I/O &amp; Template</button>
+        <button class="snip-tab" data-snip="segtree" onclick="switchSnippet('segtree', this)">🌲 Segment Tree</button>
+        <button class="snip-tab" data-snip="dsu" onclick="switchSnippet('dsu', this)">🔗 DSU (Disjoint Set)</button>
+        <button class="snip-tab" data-snip="binexp" onclick="switchSnippet('binexp', this)">📐 Lũy Thừa Nhanh</button>
+      </div>
+
+      <div class="snip-meta">
+        <span id="snipMetaText">Template C++ chuẩn thi đấu với Fast I/O và tối ưu bộ nhớ</span>
+        <button class="snip-copy-btn" id="snipCopyBtn" onclick="copyCurrentSnippet()">📋 Copy Code</button>
+      </div>
+
+      <pre class="snip-code"><code id="snipCodeBlock"></code></pre>
+    </div>
+  </section>
+
+  <!-- ─── Problem F: Timeline & Achievements ─── -->
+  <section class="section" id="achievements">
+    <div class="section-tag mono">Problem F // Roadmap</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Hành Trình & Dấu Mốc</h2>
+        <div class="section-subtitle mono">Từng chặng đường nỗ lực từ trường lớp đến các sàn đấu</div>
+      </div>
+    </div>
+
+    <div class="timeline mono">
+      <div class="tl-item">
+        <div class="tl-marker purple"><div class="tl-marker-inner"></div></div>
+        <div class="tl-year">2025 — NAY</div>
+        <div class="tl-title">THPT Chuyên Lê Quý Đôn — Vũng Tàu</div>
+        <div class="tl-sub">
+          Lớp 10 Chuyên Tin học. Tập trung rèn luyện thuật toán chuyên sâu, tham gia các kỳ thi học sinh giỏi các cấp và các đợt thi đấu Codeforces.
+        </div>
+        <span class="verdict-tag verdict-pending">⚡ ĐANG CHINH PHỤC</span>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-marker-inner"></div></div>
+        <div class="tl-year">2025</div>
+        <div class="tl-title">Tuyển sinh Lớp 10 Chuyên Tin</div>
+        <div class="tl-sub">
+          Vượt qua kỳ thi tuyển sinh khắt khe để chính thức trở thành học sinh trường THPT Chuyên Lê Quý Đôn (Tỉnh Bà Rịa - Vũng Tàu).
+        </div>
+        <span class="verdict-tag verdict-ac">✓ ACCEPTED</span>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-marker-inner"></div></div>
+        <div class="tl-year">2024</div>
+        <div class="tl-title">Top 1 Giải Bóng Bàn Vũng Tàu (U14)</div>
+        <div class="tl-sub">
+          Giành chức vô địch hạng mục lứa tuổi U14 tại Giải Bóng Bàn TP. Vũng Tàu, thăng hạng D giải bóng bàn phong trào.
+        </div>
+        <span class="verdict-tag verdict-ac">🏆 CHAMPION</span>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-marker-inner"></div></div>
+        <div class="tl-year">2022 — 2025</div>
+        <div class="tl-title">THCS Nguyễn An Ninh (Vũng Tàu)</div>
+        <div class="tl-sub">
+          Giai đoạn chuyển mình then chốt từ Toán học sang niềm đam mê khoa học máy tính và lập trình thuật toán.
+        </div>
+        <span class="verdict-tag verdict-ac">✓ COMPLETED</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Problem G: Contact & Ping ─── -->
+  <section class="section" id="contact">
+    <div class="section-tag mono">Problem G // Ping</div>
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Kết Nối Với Mình</h2>
+        <div class="section-subtitle mono">Sẵn sàng trao đổi về thuật toán, dự án công nghệ hoặc giao lưu bóng bàn</div>
+      </div>
+    </div>
+
+    <div class="contact-grid mono">
+      <div class="contact-item" onclick="copyContact('nomokadzvcl@email.com', 'Email')">
+        <div class="contact-left">
+          <span class="contact-icon">✉️</span>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-val">nomokadzvcl@email.com</div>
+          </div>
+        </div>
+        <span class="contact-action">nhấn để copy</span>
+      </div>
+
+      <div class="contact-item" onclick="copyContact('0908427574', 'Zalo')">
+        <div class="contact-left">
+          <span class="contact-icon">📱</span>
+          <div>
+            <div class="contact-label">Zalo</div>
+            <div class="contact-val">0908 427 574</div>
+          </div>
+        </div>
+        <span class="contact-action">nhấn để copy</span>
+      </div>
+
+      <div class="contact-item" onclick="window.open('https://fb.com/NoMoKa11/','_blank')">
+        <div class="contact-left">
+          <span class="contact-icon">💬</span>
+          <div>
+            <div class="contact-label">Facebook</div>
+            <div class="contact-val">fb.com/NoMoKa11</div>
+          </div>
+        </div>
+        <span class="contact-action">mở liên kết ↗</span>
+      </div>
+    </div>
+
+    <div class="socials-row mono">
+      <a href="https://codeforces.com/profile/nmk11cpy" target="_blank" class="social-pill">
+        <span>💻</span> Codeforces
+      </a>
+      <a href="https://github.com/nmkdzvcl" target="_blank" class="social-pill">
+        <span>🐙</span> GitHub
+      </a>
+      <a href="https://www.tiktok.com/@nomoka11" target="_blank" class="social-pill">
+        <span>🎵</span> TikTok
+      </a>
+      <a href="https://www.instagram.com/1401nmk_sin/" target="_blank" class="social-pill">
+        <span>📷</span> Instagram
+      </a>
+      <a href="https://discord.com/users/nmk11" target="_blank" class="social-pill">
+        <span>👾</span> Discord
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer class="mono">
+    <div>© 2026 Nguyễn Minh Khôi (NMK) · THPT Chuyên Lê Quý Đôn Vũng Tàu</div>
+    <div class="footer-sub">Built with C++ mindset, Clean HTML/CSS/JS · Zero bloated frameworks</div>
+  </footer>
+
+</div>
+
+<!-- ─── Modal: Quick Profile / CV ─── -->
+<div class="modal-overlay" id="cvModal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div class="modal-title mono">📄 Nguyễn Minh Khôi — Resume Summary</div>
+      <button class="modal-close" onclick="closeCVModal()">&times;</button>
+    </div>
+    <div class="modal-body mono" style="font-family:'Plus Jakarta Sans',sans-serif;">
+      <h3 style="color:var(--text);margin-bottom:4px;">NGUYỄN MINH KHÔI (NMK)</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">
+        Vũng Tàu, Việt Nam · Email: nomokadzvcl@email.com · Phone: 0908 427 574
+      </p>
+
+      <div style="margin-bottom:16px;">
+        <h4 style="color:var(--accent);border-bottom:1px solid var(--panel-border);padding-bottom:4px;margin-bottom:8px;font-size:14px;" class="mono">// 01. HỌC VẤN</h4>
+        <p><strong>THPT Chuyên Lê Quý Đôn — Vũng Tàu</strong> (2025 – 2028)</p>
+        <p style="font-size:13px;color:var(--text-secondary);">Học sinh Lớp 10 Chuyên Tin học</p>
+        <p style="margin-top:6px;"><strong>THCS Nguyễn An Ninh — Vũng Tàu</strong> (2022 – 2025)</p>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <h4 style="color:var(--accent);border-bottom:1px solid var(--panel-border);padding-bottom:4px;margin-bottom:8px;font-size:14px;" class="mono">// 02. KỸ NĂNG & THUẬT TOÁN</h4>
+        <p>• <strong>Ngôn ngữ:</strong> C++ (Chính), JavaScript, Python cơ bản.</p>
+        <p>• <strong>Cấu trúc dữ liệu & Thuật toán:</strong> Segment Tree, DSU, Dynamic Programming, Graph Algorithms, Binary Search.</p>
+        <p>• <strong>Công cụ:</strong> Git, GitHub, VS Code, Linux CLI cơ bản.</p>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <h4 style="color:var(--accent);border-bottom:1px solid var(--panel-border);padding-bottom:4px;margin-bottom:8px;font-size:14px;" class="mono">// 03. THÀNH TÍCH</h4>
+        <p>• <strong>Codeforces:</strong> Handle <code>nmk11cpy</code> — Peak Rating 1404 (Specialist).</p>
+        <p>• <strong>Thể thao:</strong> Top 1 Giải Bóng Bàn Vũng Tàu lứa tuổi U14 (2024), Hạng D Vũng Tàu.</p>
+        <p>• Trúng tuyển Lớp 10 Chuyên Tin THPT Chuyên Lê Quý Đôn Vũng Tàu (2025).</p>
+      </div>
+    </div>
+    <div class="modal-footer mono">
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ In / Lưu PDF</button>
+      <button class="btn btn-primary" onclick="closeCVModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Modal: Pong Mini Game ─── -->
+<div class="modal-overlay" id="pongModal">
+  <div class="modal-window" style="max-width:540px;">
+    <div class="modal-header">
+      <div class="modal-title mono">🏓 Table Tennis Mini Game</div>
+      <button class="modal-close" onclick="closePongModal()">&times;</button>
+    </div>
+    <div class="modal-body" style="text-align:center;">
+      <canvas id="pongCanvas" width="480" height="320"></canvas>
+      <div class="pong-ctrl-hint mono">
+        Di chuột hoặc chạm cảm ứng để điều khiển vợt xanh (bên trái). Đỡ bóng ghi điểm!
+      </div>
+    </div>
+    <div class="modal-footer mono">
+      <button class="btn btn-primary" onclick="closePongModal()">Thoát Game</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Toast Feedback ─── -->
+<div class="toast mono" id="toast">
+  <span>✓</span> <span id="toastMsg">Đã sao chép vào bộ nhớ tạm!</span>
+</div>
+
+<!-- ─── JavaScript Engine ─── -->
+<script>
+// ════════════════════════════════════════════════════
+//  1. PLAYLIST & STATUS
+// ════════════════════════════════════════════════════
+const playlist = [
+  'Một Triệu Như Một — Đen Vâu',
+  'Ngày Mai Em Đi — Cá Hồi Hoang',
+  'Bật Tình Yêu Lên — HIEUTHUHAI',
+  'Chìm Sâu — RPT MCK',
+  'Waiting For You — MONO',
+  'Có Chắc Yêu Là Đây — Sơn Tùng M-TP',
+  'Đưa Em Về Nhà — GREY D'
+];
+document.getElementById('currentTrack').textContent = playlist[Math.floor(Math.random() * playlist.length)];
+
+// ════════════════════════════════════════════════════
+//  2. SCROLL PROGRESS
+// ════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrolled = (winScroll / height) * 100;
+  document.getElementById('scrollProgress').style.width = scrolled + '%';
+});
+
+// ════════════════════════════════════════════════════
+//  3. CODEFORCES API & LIVE SVG CHART
+// ════════════════════════════════════════════════════
+const CF_HANDLE = 'nmk11cpy';
+
+const RANK_PALETTE = {
+  'newbie': '#808080',
+  'pupil': '#008000',
+  'specialist': '#03A89E',
+  'expert': '#0000FF',
+  'candidate master': '#AA00AA',
+  'master': '#FF8C00'
+};
+
+async function loadCodeforcesData() {
+  // Use cached data first for instant load
+  const cachedUser = localStorage.getItem('cf_user_' + CF_HANDLE);
+  if (cachedUser) {
+    try { renderCFUser(JSON.parse(cachedUser)); } catch(e){}
+  }
+
+  try {
+    const [resInfo, resRating] = await Promise.all([
+      fetch(`https://codeforces.com/api/user.info?handles=${CF_HANDLE}`),
+      fetch(`https://codeforces.com/api/user.rating?handle=${CF_HANDLE}`)
+    ]);
+
+    const infoData = await resInfo.json();
+    if (infoData.status === 'OK' && infoData.result[0]) {
+      const u = infoData.result[0];
+      localStorage.setItem('cf_user_' + CF_HANDLE, JSON.stringify(u));
+      renderCFUser(u);
+    }
+
+    const ratingData = await resRating.json();
+    if (ratingData.status === 'OK' && ratingData.result) {
+      renderCFRatingChart(ratingData.result);
+      document.getElementById('cfContestCount').textContent = ratingData.result.length;
+    }
+  } catch (err) {
+    console.warn('CF API issue:', err);
+  }
+}
+
+function renderCFUser(u) {
+  const rating = u.rating || 1382;
+  const maxRating = u.maxRating || 1404;
+  const rank = (u.rank || 'pupil').toLowerCase();
+  const maxRank = (u.maxRank || 'specialist').toLowerCase();
+
+  const color = RANK_PALETTE[rank] || '#008000';
+  const maxColor = RANK_PALETTE[maxRank] || '#03A89E';
+
+  const badge = document.getElementById('cfRankBadge');
+  badge.textContent = u.rank || 'Pupil';
+  badge.style.color = color;
+  badge.style.borderColor = color;
+  badge.style.background = color + '22';
+
+  const rVal = document.getElementById('cfRatingVal');
+  rVal.textContent = rating;
+  rVal.style.color = color;
+
+  const mrVal = document.getElementById('cfMaxRatingVal');
+  mrVal.textContent = maxRating;
+  mrVal.style.color = maxColor;
+
+  if (u.titlePhoto) {
+    document.getElementById('cfAvatar').src = u.titlePhoto;
+  }
+}
+
+function renderCFRatingChart(contests) {
+  const svg = document.getElementById('cfRatingSvg');
+  if (!contests || contests.length === 0) return;
+
+  const w = 600;
+  const h = 160;
+  const padX = 35;
+  const padY = 25;
+
+  const ratings = contests.map(c => c.newRating);
+  const minR = Math.min(0, ...ratings);
+  const maxR = Math.max(1500, ...ratings);
+
+  const points = contests.map((c, idx) => {
+    const x = padX + (idx / (contests.length - 1 || 1)) * (w - 2 * padX);
+    const y = h - padY - ((c.newRating - minR) / (maxR - minR)) * (h - 2 * padY);
+    return { x, y, rating: c.newRating, name: c.contestName, round: c.contestId, rank: c.rank };
+  });
+
+  let pathD = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    pathD += ` L ${points[i].x} ${points[i].y}`;
+  }
+
+  // Generate SVG elements
+  let svgHtml = `
+    <defs>
+      <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4FD1C5" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#4FD1C5" stop-opacity="0.0"/>
+      </linearGradient>
+    </defs>
+    <!-- Baseline grid -->
+    <line x1="${padX}" y1="${h - padY}" x2="${w - padX}" y2="${h - padY}" stroke="#212B38" stroke-dasharray="4"/>
+    <line x1="${padX}" y1="${padY}" x2="${w - padX}" y2="${padY}" stroke="#212B38" stroke-dasharray="4"/>
+    <!-- Area under curve -->
+    <path d="${pathD} L ${points[points.length-1].x} ${h-padY} L ${points[0].x} ${h-padY} Z" fill="url(#chartGrad)"/>
+    <!-- Line curve -->
+    <path d="${pathD}" fill="none" stroke="#4FD1C5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  `;
+
+  // Draw dots
+  points.forEach((p, idx) => {
+    svgHtml += `
+      <circle cx="${p.x}" cy="${p.y}" r="4.5" fill="#0D1117" stroke="#4FD1C5" stroke-width="2.5" class="chart-dot"
+        data-info="${p.name} · Rank: ${p.rank} · Rating: ${p.rating}" style="cursor:pointer;"/>
+    `;
+  });
+
+  svg.innerHTML = svgHtml;
+
+  // Add hover tooltips to dots
+  const tooltip = document.getElementById('chartTooltip');
+  const dots = svg.querySelectorAll('.chart-dot');
+  dots.forEach(d => {
+    d.addEventListener('mouseenter', (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const parentRect = svg.getBoundingClientRect();
+      const x = rect.left - parentRect.left + 4;
+      const y = rect.top - parentRect.top;
+      tooltip.textContent = d.getAttribute('data-info');
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+      tooltip.style.opacity = '1';
+    });
+    d.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+    });
+  });
+}
+
+// ════════════════════════════════════════════════════
+//  4. ALGORITHM SNIPPETS DATA & INTERACTION
+// ════════════════════════════════════════════════════
+const SNIPPETS = {
+  fastio: {
+    desc: 'Template C++ chuẩn thi đấu với Fast I/O và tối ưu tốc độ',
+    code: `#include <bits/stdc++.h>
+using namespace std;
+
+#define fast_io ios_base::sync_with_stdio(false); cin.tie(NULL);
+#define ll long long
+#define all(v) (v).begin(), (v).end()
+const int MOD = 1e9 + 7;
+
+void solve() {
+    // Viết lời giải thuật toán ở đây
+}
+
+int main() {
+    fast_io;
+    int t = 1;
+    cin >> t;
+    while (t--) solve();
+    return 0;
+}`
+  },
+  segtree: {
+    desc: 'Cây phân đoạn (Segment Tree) hỗ trợ Range Query & Point Update O(log N)',
+    code: `const int MAXN = 2e5 + 5;
+ll tree[4 * MAXN], a[MAXN];
+
+void build(int node, int l, int r) {
+    if (l == r) { tree[node] = a[l]; return; }
+    int mid = (l + r) / 2;
+    build(2 * node, l, mid);
+    build(2 * node + 1, mid + 1, r);
+    tree[node] = tree[2 * node] + tree[2 * node + 1];
+}
+
+void update(int node, int l, int r, int idx, ll val) {
+    if (l == r) { tree[node] = val; return; }
+    int mid = (l + r) / 2;
+    if (idx <= mid) update(2 * node, l, mid, idx, val);
+    else update(2 * node + 1, mid + 1, r, idx, val);
+    tree[node] = tree[2 * node] + tree[2 * node + 1];
+}
+
+ll query(int node, int l, int r, int ql, int qr) {
+    if (ql > r || qr < l) return 0;
+    if (ql <= l && r <= qr) return tree[node];
+    int mid = (l + r) / 2;
+    return query(2 * node, l, mid, ql, qr) + query(2 * node + 1, mid + 1, r, ql, qr);
+}`
+  },
+  dsu: {
+    desc: 'Disjoint Set Union (DSU) với nén đường đi và gộp theo kích thước O(α(N))',
+    code: `struct DSU {
+    vector<int> parent, sz;
+    DSU(int n) {
+        parent.resize(n + 1);
+        sz.assign(n + 1, 1);
+        iota(parent.begin(), parent.end(), 0);
+    }
+    int find(int v) {
+        if (v == parent[v]) return v;
+        return parent[v] = find(parent[v]); // Path compression
+    }
+    bool unite(int a, int b) {
+        a = find(a); b = find(b);
+        if (a != b) {
+            if (sz[a] < sz[b]) swap(a, b);
+            parent[b] = a;
+            sz[a] += sz[b];
+            return true;
+        }
+        return false;
+    }
+};`
+  },
+  binexp: {
+    desc: 'Lũy thừa nhanh tính (a^b) % MOD trong độ phức tạp O(log b)',
+    code: `ll binpow(ll a, ll b, ll mod = 1e9 + 7) {
+    ll res = 1;
+    a %= mod;
+    while (b > 0) {
+        if (b & 1) res = (res * a) % mod;
+        a = (a * a) % mod;
+        b >>= 1;
+    }
+    return res;
+}`
+  }
+};
+
+let currentSnipKey = 'fastio';
+
+function switchSnippet(key, btnEl) {
+  currentSnipKey = key;
+  const s = SNIPPETS[key];
+  if (!s) return;
+  document.getElementById('snipMetaText').textContent = s.desc;
+  document.getElementById('snipCodeBlock').textContent = s.code;
+
+  const tabs = document.querySelectorAll('.snip-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  if (btnEl) {
+    btnEl.classList.add('active');
+  } else {
+    const targetTab = document.querySelector(`.snip-tab[data-snip="${key}"]`);
+    if (targetTab) targetTab.classList.add('active');
+  }
+}
+
+function copyCurrentSnippet() {
+  const code = SNIPPETS[currentSnipKey]?.code || '';
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('Đã copy mã nguồn template C++!');
+  });
+}
+
+// ════════════════════════════════════════════════════
+//  5. INTERACTIVE CLI / TERMINAL ENGINE
+// ════════════════════════════════════════════════════
+const cliInput = document.getElementById('cliInput');
+const cliOutput = document.getElementById('cliOutput');
+const cliHistory = [];
+let historyIdx = -1;
+
+function focusCLI() {
+  document.getElementById('cliWrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => cliInput.focus(), 300);
+}
+
+cliInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const val = cliInput.value.trim();
+    if (!val) return;
+    cliHistory.push(val);
+    historyIdx = cliHistory.length;
+    executeCLI(val);
+    cliInput.value = '';
+  } else if (e.key === 'ArrowUp') {
+    if (historyIdx > 0) {
+      historyIdx--;
+      cliInput.value = cliHistory[historyIdx] || '';
+    }
+  } else if (e.key === 'ArrowDown') {
+    if (historyIdx < cliHistory.length - 1) {
+      historyIdx++;
+      cliInput.value = cliHistory[historyIdx] || '';
+    } else {
+      historyIdx = cliHistory.length;
+      cliInput.value = '';
+    }
+  }
+});
+
+function executeCLI(rawCmd) {
+  const cmd = rawCmd.trim().toLowerCase();
+  printCLILine('❯ ' + rawCmd, 'cli-line-cmd');
+
+  switch (cmd) {
+    case 'help':
+      printCLILine(`DANH SÁCH LỆNH KHẢ DỤNG:
+  • neofetch    : Thông số cá nhân phong cách Linux
+  • cf          : Kiểm tra stats Codeforces realtime
+  • pong        : Khởi chạy mini-game Bóng bàn 2D
+  • matrix      : Kích hoạt hiệu ứng mưa mã xanh Matrix
+  • cv          : Xem và in hồ sơ cá nhân
+  • skills      : Danh sách kỹ năng lập trình & thể thao
+  • about       : Cuộn tới phần giới thiệu bản thân
+  • dual        : Cuộn tới phần Dual Mode (Code & Bóng bàn)
+  • snippets    : Cuộn tới kho thuật toán C++
+  • journey     : Cuộn tới hành trình & thành tích
+  • contact     : Thông tin liên hệ nhanh
+  • sudo        : Thử quyền quản trị viên
+  • clear       : Xóa sạch màn hình terminal`, 'cli-line-res');
+      break;
+
+    case 'about':
+      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+      printCLILine('Đang chuyển đến Problem A: Giới thiệu bản thân...', 'cli-line-info');
+      break;
+
+    case 'dual':
+      document.getElementById('dual')?.scrollIntoView({ behavior: 'smooth' });
+      printCLILine('Đang chuyển đến Problem B: Dual Mode...', 'cli-line-info');
+      break;
+
+    case 'snippets':
+      document.getElementById('snippets')?.scrollIntoView({ behavior: 'smooth' });
+      printCLILine('Đang chuyển đến Problem E: Kho thuật toán C++...', 'cli-line-info');
+      break;
+
+    case 'journey':
+    case 'achievements':
+      document.getElementById('achievements')?.scrollIntoView({ behavior: 'smooth' });
+      printCLILine('Đang chuyển đến Problem F: Hành trình & Thành tích...', 'cli-line-info');
+      break;
+
+    case 'neofetch':
+      printCLILine(`       _   _ __  __ _  __
+      | \\ | |  \\/  | |/ /   User: nguyenminhkhoi@lqdon
+      |  \\| | |\\/| | ' /    OS: Le Quy Don Gifted High School
+      | |\\  | |  | | . \\    Grade: 10 Chuyên Tin (2025-2028)
+      |_| \\_|_|  |_|_|\\_\\   Shell: C++20 / STL / Fast I/O
+                            CPU: Brain @ High Thinking Capacity
+                            Rating: 1382 (Peak: 1404 Specialist)
+                            Sport: Top 1 U14 Table Tennis (2024)`, 'cli-line-info');
+      break;
+
+    case 'cf':
+      printCLILine(`[Codeforces API Handle: ${CF_HANDLE}]
+Rating: 1382 | Max: 1404 (Specialist)
+Contests: 7 | Problems Solved: 100+
+Profile: https://codeforces.com/profile/nmk11cpy`, 'cli-line-res');
+      break;
+
+    case 'skills':
+      printCLILine(`• Main: C++20, Algorithms, Data Structures (Segment Tree, DSU, DP)
+• Tools: Git, VS Code, Linux CLI
+• Sport: VĐV Bóng bàn hạng D, Top 1 U14 Vũng Tàu 2024`, 'cli-line-res');
+      break;
+
+    case 'contact':
+      printCLILine(`Email: nomokadzvcl@email.com
+Zalo/Phone: 0908 427 574
+Facebook: https://fb.com/NoMoKa11/`, 'cli-line-res');
+      break;
+
+    case 'cv':
+      openCVModal();
+      printCLILine('Đã mở cửa sổ Resume Summary.', 'cli-line-res');
+      break;
+
+    case 'pong':
+      openPongModal();
+      printCLILine('Đã khởi chạy trò chơi Pong!', 'cli-line-info');
+      break;
+
+    case 'matrix':
+      toggleMatrix();
+      printCLILine('Đã kích hoạt Matrix Mode! Bấm ESC hoặc click màn hình để thoát.', 'cli-line-info');
+      break;
+
+    case 'sudo':
+      printCLILine('Permission denied: User is not in the sudoers file. This incident will be reported to Le Quy Don school admins.', 'cli-line-err');
+      break;
+
+    case 'clear':
+      cliOutput.innerHTML = '';
+      break;
+
+    default:
+      printCLILine(`Lệnh '${rawCmd}' không tìm thấy. Gõ 'help' để xem danh sách lệnh.`, 'cli-line-err');
+      break;
+  }
+}
+
+function printCLILine(text, className = 'cli-line-res') {
+  const line = document.createElement('div');
+  line.className = 'cli-line ' + className;
+  line.textContent = text;
+  cliOutput.appendChild(line);
+  cliOutput.scrollTop = cliOutput.scrollHeight;
+}
+
+// ════════════════════════════════════════════════════
+//  6. MATRIX RAIN EFFECT
+// ════════════════════════════════════════════════════
+let matrixInterval = null;
+const canvas = document.getElementById('matrixCanvas');
+const ctx = canvas.getContext('2d');
+
+function toggleMatrix() {
+  if (canvas.classList.contains('active')) {
+    canvas.classList.remove('active');
+    clearInterval(matrixInterval);
+    return;
+  }
+  canvas.classList.add('active');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const chars = '0101010101ABCDEFАБВГДЖZNMKLQDON4FD1C5';
+  const fontSize = 14;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
+
+  clearInterval(matrixInterval);
+  matrixInterval = setInterval(() => {
+    ctx.fillStyle = 'rgba(9, 13, 18, 0.08)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#4FD1C5';
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }, 33);
+}
+
+canvas.addEventListener('click', () => toggleMatrix());
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && canvas.classList.contains('active')) {
+    toggleMatrix();
+  }
+});
+
+// ════════════════════════════════════════════════════
+//  7. PONG MINI GAME
+// ════════════════════════════════════════════════════
+let pongAnimId = null;
+const pCanvas = document.getElementById('pongCanvas');
+const pCtx = pCanvas.getContext('2d');
+
+let ballX = 240, ballY = 160, ballSpdX = 4, ballSpdY = 3, ballR = 6;
+let playerY = 120, aiY = 120;
+const paddleH = 60, paddleW = 8;
+let scorePlayer = 0, scoreAI = 0;
+
+function runPong() {
+  // Update ball
+  ballX += ballSpdX;
+  ballY += ballSpdY;
+
+  // Bounce top/bottom
+  if (ballY - ballR <= 0 || ballY + ballR >= pCanvas.height) {
+    ballSpdY = -ballSpdY;
+  }
+
+  // Player Paddle Collision (left)
+  if (ballX - ballR <= paddleW + 10) {
+    if (ballY >= playerY && ballY <= playerY + paddleH) {
+      ballSpdX = -ballSpdX * 1.05; // speed up slightly
+      scorePlayer++;
+    } else if (ballX < 0) {
+      // AI score
+      scoreAI++;
+      resetBall();
+    }
+  }
+
+  // AI Paddle Collision (right)
+  if (ballX + ballR >= pCanvas.width - paddleW - 10) {
+    if (ballY >= aiY && ballY <= aiY + paddleH) {
+      ballSpdX = -ballSpdX;
+    } else if (ballX > pCanvas.width) {
+      resetBall();
+    }
+  }
+
+  // Simple AI tracking
+  aiY += (ballY - (aiY + paddleH / 2)) * 0.08;
+
+  // Draw
+  pCtx.fillStyle = '#090D12';
+  pCtx.fillRect(0, 0, pCanvas.width, pCanvas.height);
+
+  // Center net
+  pCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+  pCtx.setLineDash([4, 4]);
+  pCtx.beginPath();
+  pCtx.moveTo(pCanvas.width / 2, 0);
+  pCtx.lineTo(pCanvas.width / 2, pCanvas.height);
+  pCtx.stroke();
+  pCtx.setLineDash([]);
+
+  // Player paddle (cyan)
+  pCtx.fillStyle = '#4FD1C5';
+  pCtx.fillRect(10, playerY, paddleW, paddleH);
+
+  // AI paddle (purple)
+  pCtx.fillStyle = '#A371F7';
+  pCtx.fillRect(pCanvas.width - paddleW - 10, aiY, paddleW, paddleH);
+
+  // Ball
+  pCtx.fillStyle = '#FFF';
+  pCtx.beginPath();
+  pCtx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+  pCtx.fill();
+
+  // Score
+  pCtx.font = '16px monospace';
+  pCtx.fillStyle = '#8B949E';
+  pCtx.fillText(`Player: ${scorePlayer}`, 40, 25);
+  pCtx.fillText(`AI: ${scoreAI}`, pCanvas.width - 120, 25);
+
+  pongAnimId = requestAnimationFrame(runPong);
+}
+
+function resetBall() {
+  ballX = pCanvas.width / 2;
+  ballY = pCanvas.height / 2;
+  ballSpdX = (Math.random() > 0.5 ? 4 : -4);
+  ballSpdY = (Math.random() * 4 - 2);
+}
+
+pCanvas.addEventListener('mousemove', (e) => {
+  const rect = pCanvas.getBoundingClientRect();
+  const root = document.documentElement;
+  const mouseY = e.clientY - rect.top - root.scrollTop;
+  playerY = mouseY - paddleH / 2;
+});
+
+pCanvas.addEventListener('touchmove', (e) => {
+  e.preventDefault();
+  const rect = pCanvas.getBoundingClientRect();
+  const touchY = e.touches[0].clientY - rect.top;
+  playerY = touchY - paddleH / 2;
+}, { passive: false });
+
+function openPongModal() {
+  document.getElementById('pongModal').classList.add('active');
+  cancelAnimationFrame(pongAnimId);
+  resetBall();
+  runPong();
+}
+
+function closePongModal() {
+  document.getElementById('pongModal').classList.remove('active');
+  cancelAnimationFrame(pongAnimId);
+}
+
+// ════════════════════════════════════════════════════
+//  8. RESUME / CV MODAL
+// ════════════════════════════════════════════════════
+function openCVModal() {
+  document.getElementById('cvModal').classList.add('active');
+}
+function closeCVModal() {
+  document.getElementById('cvModal').classList.remove('active');
+}
+
+// ════════════════════════════════════════════════════
+//  9. TOAST NOTIFICATION & CLIPBOARD
+// ════════════════════════════════════════════════════
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function copyContact(val, type) {
+  navigator.clipboard.writeText(val).then(() => {
+    showToast(`Đã copy ${type}: ${val}`);
+  });
+}
+
+// ════════════════════════════════════════════════════
+//  10. INITIALIZATION
+// ════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  // Load default snippet
+  switchSnippet('fastio');
+  // Load Codeforces data
+  loadCodeforcesData();
+});
+</script>
+</body>
+</html>
