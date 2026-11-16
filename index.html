@@ -128,7 +128,7 @@
     border: 1px solid rgba(79, 209, 197, 0.25);
   }
   .nav-links {
-    display: flex; gap: 18px; font-size: 13px; align-items: center;
+    display: flex; gap: 14px; font-size: 13px; align-items: center;
     flex-wrap: wrap;
   }
   .nav-links a {
@@ -139,7 +139,10 @@
   }
   .nav-links a::before { content: "#"; color: var(--muted); margin-right: 3px; }
   .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-  .nav-terminal-btn {
+  .nav-actions {
+    display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  }
+  .nav-terminal-btn, .nav-swarm-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--panel-border);
     color: var(--accent);
@@ -147,11 +150,28 @@
     cursor: pointer; font-size: 12px;
     display: inline-flex; align-items: center; gap: 6px;
     transition: all 0.2s;
+    white-space: nowrap;
   }
   .nav-terminal-btn:hover {
     background: rgba(79, 209, 197, 0.12);
     border-color: var(--accent);
     transform: translateY(-1px);
+  }
+  .nav-swarm-btn {
+    color: #C4B5FD;
+    background: rgba(163, 113, 247, 0.09);
+    border-color: rgba(163, 113, 247, 0.32);
+  }
+  .nav-swarm-btn:hover {
+    background: rgba(163, 113, 247, 0.18);
+    border-color: var(--purple);
+    color: #E9D5FF;
+    box-shadow: 0 0 16px rgba(163, 113, 247, 0.24);
+    transform: translateY(-1px);
+  }
+  .nav-swarm-btn.rebuilding .swarm-btn-icon {
+    display: inline-block;
+    animation: spin 1s linear infinite;
   }
 
   /* Main Container */
@@ -767,6 +787,117 @@
   }
   #matrixCanvas.active { opacity: 0.92; pointer-events: auto; }
 
+  /* ─── Swarm Rebuild Canvas & Telemetry HUD ─── */
+  #swarmCanvas {
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  body.swarm-active #swarmCanvas { z-index: 150; }
+  body.swarm-active .nav { border-bottom-color: rgba(79, 209, 197, 0.45); }
+
+  .btn-swarm {
+    background: linear-gradient(135deg, rgba(79, 209, 197, 0.12), rgba(163, 113, 247, 0.14));
+    border-color: rgba(163, 113, 247, 0.38);
+    color: #D2A8FF;
+  }
+  .btn-swarm:hover {
+    border-color: var(--purple);
+    color: #F3E8FF;
+    box-shadow: 0 0 22px rgba(163, 113, 247, 0.28);
+    transform: translateY(-1px);
+  }
+  .btn-swarm.rebuilding .swarm-btn-icon {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+  }
+
+  .swarm-hud {
+    position: fixed; bottom: 24px; left: 24px; z-index: 900;
+    background: rgba(13, 17, 23, 0.92);
+    border: 1px solid rgba(79, 209, 197, 0.42);
+    border-radius: 10px;
+    padding: 10px 14px 12px;
+    min-width: 256px; max-width: calc(100vw - 32px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.68), 0 0 24px rgba(79, 209, 197, 0.14);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0; transform: translateY(18px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  .swarm-hud.visible {
+    opacity: 1; transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .swarm-hud-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; font-size: 11.5px; font-weight: 700; color: var(--text);
+  }
+  .swarm-hud-status {
+    display: flex; align-items: center; gap: 7px;
+  }
+  .swarm-hud-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 0.9s infinite ease-in-out;
+  }
+  .swarm-hud.done .swarm-hud-dot {
+    background: var(--ac);
+    box-shadow: 0 0 8px var(--ac);
+    animation: none;
+  }
+  .swarm-hud-skip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--panel-border);
+    color: var(--text-secondary);
+    padding: 2px 7px; border-radius: 4px;
+    font-size: 10.5px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .swarm-hud-skip:hover {
+    color: var(--accent); border-color: var(--accent);
+  }
+  .swarm-hud-meta {
+    margin-top: 4px; font-size: 11px; color: var(--muted);
+  }
+  .swarm-hud-bar {
+    position: absolute; left: 0; bottom: 0; height: 2px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    transition: width 0.08s linear;
+  }
+
+  .swarm-shell-ghost {
+    overflow: visible !important;
+    border-style: dashed !important;
+    border-color: rgba(79, 209, 197, 0.44) !important;
+    background: rgba(19, 25, 34, 0.28) !important;
+    box-shadow: inset 0 0 30px rgba(79, 209, 197, 0.08), 0 0 20px rgba(163, 113, 247, 0.09) !important;
+    transition: background 0.28s ease, border-color 0.28s ease;
+  }
+  .swarm-piece-floating {
+    will-change: transform, opacity;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 16px rgba(79, 209, 197, 0.16);
+  }
+  .swarm-locked {
+    animation: swarmLockFlash 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes swarmLockFlash {
+    0% {
+      box-shadow: 0 0 0 1px rgba(79, 209, 197, 0.85), 0 0 24px rgba(79, 209, 197, 0.42);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(79, 209, 197, 0), 0 0 0 rgba(79, 209, 197, 0);
+    }
+  }
+  .swarm-scroll-pending {
+    opacity: 0 !important;
+    transform: translate3d(0, 22px, 0) scale(0.94);
+    pointer-events: none;
+  }
+
   /* ─── Media Queries ─── */
   @media (max-width: 720px) {
     .container { padding: 20px 14px 80px; }
@@ -776,12 +907,17 @@
     .dual-grid { grid-template-columns: 1fr; }
     .section { padding: 20px 18px; }
     .nav-links { display: none; } /* Mobile simplified */
+    .swarm-hud { left: 14px; right: 14px; bottom: 14px; min-width: 0; }
+  }
+  @media (max-width: 440px) {
+    .nav-badge { display: none; }
+    .nav-terminal-btn, .nav-swarm-btn { padding: 5px 8px; font-size: 11px; }
   }
 
   /* Print Styles for CV */
   @media print {
     body { background: #fff !important; color: #000 !important; }
-    .nav, .terminal-actions, .cli-wrapper, #matrixCanvas, #scrollProgress, .modal-footer, .nav-terminal-btn { display: none !important; }
+    .nav, .terminal-actions, .cli-wrapper, #matrixCanvas, #swarmCanvas, #swarmHud, #scrollProgress, .modal-footer, .nav-terminal-btn, .nav-swarm-btn { display: none !important; }
     .section, .terminal { border: none !important; box-shadow: none !important; background: transparent !important; }
     .text, .spec-val, .about-story { color: #111 !important; }
   }
@@ -790,7 +926,20 @@
 <body>
 
 <div id="scrollProgress"></div>
+<canvas id="swarmCanvas"></canvas>
 <canvas id="matrixCanvas"></canvas>
+
+<div id="swarmHud" class="swarm-hud mono" aria-live="polite">
+  <div class="swarm-hud-top">
+    <span class="swarm-hud-status">
+      <span class="swarm-hud-dot"></span>
+      <span id="swarmHudStage">SWARM::READY</span>
+    </span>
+    <button class="swarm-hud-skip" id="swarmHudSkip" onclick="completeSwarmRebuild(true)" title="Hoàn tất ngay (Esc)">ESC</button>
+  </div>
+  <div class="swarm-hud-meta" id="swarmHudMeta">Nodes: 0/0 · Agents: 0</div>
+  <div class="swarm-hud-bar" id="swarmHudBar"></div>
+</div>
 
 <!-- ─── Navbar ─── -->
 <nav class="nav">
@@ -808,9 +957,14 @@
       <a href="#achievements">journey</a>
       <a href="#contact">contact</a>
     </div>
-    <button class="nav-terminal-btn mono" onclick="focusCLI()">
-      <span>⌨</span> CLI Mode
-    </button>
+    <div class="nav-actions">
+      <button class="nav-swarm-btn mono" id="navSwarmBtn" onclick="triggerSwarmRebuild()" title="Kích hoạt hiệu ứng Swarm Rebuild">
+        <span class="swarm-btn-icon">✦</span> Swarm
+      </button>
+      <button class="nav-terminal-btn mono" onclick="focusCLI()">
+        <span>⌨</span> CLI Mode
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -895,11 +1049,12 @@
         <div class="cli-output" id="cliOutput"></div>
         <div class="cli-input-row">
           <span class="cli-prompt-sym">❯</span>
-          <input type="text" id="cliInput" class="cli-input" placeholder="Gõ lệnh (thử 'help', 'neofetch', 'cf', 'pong', 'matrix')..." autocomplete="off" spellcheck="false">
+          <input type="text" id="cliInput" class="cli-input" placeholder="Gõ lệnh (thử 'help', 'swarm', 'neofetch', 'cf', 'pong', 'matrix')..." autocomplete="off" spellcheck="false">
         </div>
         <div class="cli-quick-chips">
           <span class="cli-chip-label">Lệnh nhanh:</span>
           <span class="cli-chip" onclick="executeCLI('help')">help</span>
+          <span class="cli-chip" onclick="executeCLI('swarm')">swarm</span>
           <span class="cli-chip" onclick="executeCLI('neofetch')">neofetch</span>
           <span class="cli-chip" onclick="executeCLI('cf')">cf</span>
           <span class="cli-chip" onclick="executeCLI('pong')">pong</span>
@@ -914,6 +1069,9 @@
         <a href="#contact" class="btn btn-primary">📬 Kết nối với mình</a>
         <button class="btn btn-secondary" onclick="openCVModal()">📄 Xem hồ sơ (CV)</button>
         <button class="btn btn-secondary" onclick="executeCLI('pong')">🏓 Thử thách Pong</button>
+        <button class="btn btn-secondary btn-swarm" id="heroSwarmBtn" onclick="triggerSwarmRebuild()">
+          <span class="swarm-btn-icon">✦</span> Swarm Rebuild
+        </button>
       </div>
     </div>
   </div>
@@ -1749,6 +1907,8 @@ function executeCLI(rawCmd) {
   switch (cmd) {
     case 'help':
       printCLILine(`DANH SÁCH LỆNH KHẢ DỤNG:
+  • swarm       : Kích hoạt hiệu ứng phân rã & tái tạo Swarm Rebuild
+  • swarm bg    : Bật/tắt chế độ hạt Swarm nền (ambient)
   • neofetch    : Thông số cá nhân phong cách Linux
   • cf          : Kiểm tra stats Codeforces realtime
   • spotify     : Thông tin bài hát đang nghe
@@ -1764,6 +1924,19 @@ function executeCLI(rawCmd) {
   • contact     : Thông tin liên hệ nhanh
   • sudo        : Thử quyền quản trị viên
   • clear       : Xóa sạch màn hình terminal`, 'cli-line-res');
+      break;
+
+    case 'swarm':
+    case 'rebuild':
+    case 'swarm rebuild':
+      printCLILine('[SWARM] Đang phân rã các node giao diện & tái cấu trúc bằng bầy hạt...', 'cli-line-info');
+      triggerSwarmRebuild();
+      break;
+
+    case 'swarm bg':
+    case 'swarm ambient':
+      const ambientState = toggleSwarmAmbient();
+      printCLILine(`[SWARM] Ambient particle field: ${ambientState ? 'ON' : 'OFF'}.`, 'cli-line-info');
       break;
 
     case 'spotify':
@@ -2059,6 +2232,1217 @@ window.addEventListener('load', () => {
   checkLanyardPresence();
   setInterval(checkLanyardPresence, 15000);
 });
+
+// ════════════════════════════════════════════════════
+//  11. SWARM REBUILD ENGINE
+// ════════════════════════════════════════════════════
+(() => {
+  const sCanvas = document.getElementById('swarmCanvas');
+  if (!sCanvas) return;
+  const sCtx = sCanvas.getContext('2d');
+
+  const hudEl = document.getElementById('swarmHud');
+  const hudStageEl = document.getElementById('swarmHudStage');
+  const hudMetaEl = document.getElementById('swarmHudMeta');
+  const hudBarEl = document.getElementById('swarmHudBar');
+  const navBtn = document.getElementById('navSwarmBtn');
+  const heroBtn = document.getElementById('heroSwarmBtn');
+
+  const SHELL_SELECTOR = '.terminal, section.section, .cf-dashboard';
+  const PIECE_SELECTORS = [
+    '.terminal-topbar',
+    '.hero-intro',
+    '.avatar-container',
+    '.status-item',
+    '.cli-wrapper',
+    '.hero-actions .btn',
+    '.section-tag',
+    '.section-header',
+    '.problem-box',
+    '.about-story p',
+    '.dual-card',
+    '.cf-header-bar',
+    '.cf-stat-card',
+    '.chart-container',
+    '.skill-group-title',
+    '.tags .tag',
+    '.snippets-wrap',
+    '.tl-item',
+    '.contact-item',
+    '.socials-row .social-pill',
+    'footer'
+  ].join(', ');
+
+  const SWARM_COLORS = ['#4FD1C5', '#A371F7', '#58A6FF', '#3FB950', '#E6EDF3'];
+  const CODE_GLYPHS = '01{}<>/+*#;[]';
+  const SCRAMBLE_GLYPHS = '01#<>{}[]/*+=NMK';
+
+  let vw = window.innerWidth;
+  let vh = window.innerHeight;
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  let rafId = null;
+  let lastFrameTime = 0;
+  let hudHideTimer = null;
+  let scrambleRafId = null;
+  let ambientEnabled = localStorage.getItem('nmk_swarm_ambient') !== 'false';
+  let scrollObserver = null;
+
+  const pointer = { x: -9999, y: -9999, active: false };
+
+  const swarmState = {
+    active: false,
+    mode: 'full',
+    startTime: 0,
+    disperseEnd: 460,
+    flockEnd: 1080,
+    totalEnd: 2250,
+    pieces: [],
+    shells: [],
+    particles: [],
+    lockedCount: 0
+  };
+
+  const sectionBursts = [];
+  const shockwaves = [];
+  const sparks = [];
+  const ambientParticles = [];
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function clamp(v, min, max) {
+    return v < min ? min : v > max ? max : v;
+  }
+
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function easeOutBack(t, overshoot = 1.18) {
+    const c1 = overshoot;
+    const c3 = c1 + 1;
+    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+  }
+
+  function resizeSwarmCanvas() {
+    vw = window.innerWidth;
+    vh = window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    sCanvas.width = Math.floor(vw * dpr);
+    sCanvas.height = Math.floor(vh * dpr);
+    sCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function isOverlayBlocking() {
+    const matrixOn = document.getElementById('matrixCanvas')?.classList.contains('active');
+    const pongOn = document.getElementById('pongModal')?.classList.contains('active');
+    const cvOn = document.getElementById('cvModal')?.classList.contains('active');
+    return Boolean(document.hidden || matrixOn || pongOn || cvOn);
+  }
+
+  function samplePerimeterAnchor() {
+    const roll = Math.random();
+    if (roll < 0.78) {
+      const edge = Math.floor(Math.random() * 4);
+      const t = Math.random();
+      if (edge === 0) return { u: t, v: 0 };
+      if (edge === 1) return { u: 1, v: t };
+      if (edge === 2) return { u: t, v: 1 };
+      return { u: 0, v: t };
+    }
+    return {
+      u: 0.1 + Math.random() * 0.8,
+      v: 0.1 + Math.random() * 0.8
+    };
+  }
+
+  function sampleCurlField(x, y, time, cx, cy) {
+    const dx = x - cx;
+    const dy = y - cy;
+    const dist = Math.hypot(dx, dy) + 1;
+    const swirl = 0.25 * Math.min(1.2, dist / 210);
+    const tx = (-dy / dist) * swirl;
+    const ty = (dx / dist) * swirl;
+    const waveX = Math.sin(x * 0.0085 + time * 0.0023) * Math.cos(y * 0.0085 - time * 0.0019);
+    const waveY = Math.cos(x * 0.0065 - y * 0.0065 + time * 0.0026);
+    return {
+      ax: tx + waveX * 0.3,
+      ay: ty + waveY * 0.3
+    };
+  }
+
+  function scrambleDecode(el) {
+    if (!el || prefersReducedMotion()) return;
+    if (!el.dataset.origText) {
+      el.dataset.origText = el.textContent;
+    }
+    const target = el.dataset.origText;
+    if (scrambleRafId) cancelAnimationFrame(scrambleRafId);
+
+    const start = performance.now();
+    const duration = 420;
+
+    function step(now) {
+      const progress = clamp((now - start) / duration, 0, 1);
+      const revealedCount = Math.floor(progress * target.length);
+      let out = '';
+      for (let i = 0; i < target.length; i++) {
+        const ch = target[i];
+        if (ch === ' ' || i < revealedCount) {
+          out += ch;
+        } else {
+          out += SCRAMBLE_GLYPHS[Math.floor(Math.random() * SCRAMBLE_GLYPHS.length)];
+        }
+      }
+      el.textContent = out;
+      if (progress < 1 && swarmState.active) {
+        scrambleRafId = requestAnimationFrame(step);
+      } else {
+        el.textContent = target;
+        scrambleRafId = null;
+      }
+    }
+    scrambleRafId = requestAnimationFrame(step);
+  }
+
+  function restoreScrambledText() {
+    if (scrambleRafId) {
+      cancelAnimationFrame(scrambleRafId);
+      scrambleRafId = null;
+    }
+    const heroName = document.getElementById('heroName');
+    if (heroName && heroName.dataset.origText) {
+      heroName.textContent = heroName.dataset.origText;
+    }
+  }
+
+  function spawnLockEffects(docRect, color) {
+    shockwaves.push({
+      docLeft: docRect.left,
+      docTop: docRect.top,
+      width: docRect.width,
+      height: docRect.height,
+      born: performance.now(),
+      duration: 420,
+      color: color || '#4FD1C5'
+    });
+
+    const corners = [
+      { x: docRect.left - window.scrollX, y: docRect.top - window.scrollY },
+      { x: docRect.left - window.scrollX + docRect.width, y: docRect.top - window.scrollY },
+      { x: docRect.left - window.scrollX + docRect.width, y: docRect.top - window.scrollY + docRect.height },
+      { x: docRect.left - window.scrollX, y: docRect.top - window.scrollY + docRect.height }
+    ];
+
+    for (let c = 0; c < corners.length; c++) {
+      const count = docRect.width > 160 ? 2 : 1;
+      for (let k = 0; k < count; k++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = 1.1 + Math.random() * 2.6;
+        sparks.push({
+          x: corners[c].x,
+          y: corners[c].y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          life: 0,
+          maxLife: 24 + Math.random() * 16,
+          color: c % 2 === 0 ? '#4FD1C5' : '#A371F7',
+          size: 1.3 + Math.random() * 1.4
+        });
+      }
+    }
+  }
+
+  function showHud(stageText, metaText, progressPct, isDone = false) {
+    if (!hudEl) return;
+    clearTimeout(hudHideTimer);
+    hudEl.classList.add('visible');
+    hudEl.classList.toggle('done', isDone);
+    if (hudStageEl) hudStageEl.textContent = stageText;
+    if (hudMetaEl) hudMetaEl.textContent = metaText;
+    if (hudBarEl) hudBarEl.style.width = `${clamp(progressPct, 0, 100).toFixed(1)}%`;
+  }
+
+  function scheduleHudHide(delay = 1900) {
+    clearTimeout(hudHideTimer);
+    hudHideTimer = setTimeout(() => {
+      if (hudEl && !swarmState.active) {
+        hudEl.classList.remove('visible', 'done');
+      }
+    }, delay);
+  }
+
+  function setButtonRebuilding(active) {
+    if (navBtn) navBtn.classList.toggle('rebuilding', active);
+    if (heroBtn) heroBtn.classList.toggle('rebuilding', active);
+  }
+
+  function clearPendingClasses() {
+    document.querySelectorAll('.swarm-scroll-pending').forEach(el => {
+      el.classList.remove('swarm-scroll-pending');
+    });
+  }
+
+  function resetAllPieceStyles() {
+    document.querySelectorAll(SHELL_SELECTOR).forEach(sh => {
+      sh.classList.remove('swarm-shell-ghost');
+    });
+    document.querySelectorAll(PIECE_SELECTORS).forEach(el => {
+      el.style.transform = '';
+      el.style.opacity = '';
+      el.style.transition = '';
+      el.classList.remove('swarm-piece-floating');
+    });
+  }
+
+  function initAmbientParticles() {
+    ambientParticles.length = 0;
+    const count = vw < 720 ? 16 : 26;
+    for (let i = 0; i < count; i++) {
+      ambientParticles.push({
+        x: Math.random() * vw,
+        y: Math.random() * vh,
+        vx: (Math.random() - 0.5) * 0.55,
+        vy: (Math.random() - 0.5) * 0.55,
+        size: 1.3 + Math.random() * 1.4,
+        color: SWARM_COLORS[i % 3],
+        alpha: 0.16 + Math.random() * 0.18,
+        kind: i % 5 === 0 ? 'glyph' : 'boid',
+        glyph: CODE_GLYPHS[i % CODE_GLYPHS.length],
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function ensureLoopRunning() {
+    if (rafId === null) {
+      lastFrameTime = performance.now();
+      rafId = requestAnimationFrame(tickSwarm);
+    }
+  }
+
+  function startSwarmRebuild({ mode = 'full' } = {}) {
+    if (prefersReducedMotion()) {
+      if (mode === 'full') {
+        document.querySelectorAll(PIECE_SELECTORS).forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.bottom > 0 && r.top < vh) {
+            el.classList.remove('swarm-locked');
+            void el.offsetWidth;
+            el.classList.add('swarm-locked');
+            setTimeout(() => el.classList.remove('swarm-locked'), 600);
+          }
+        });
+        showToast('⚡ Đã tái cấu trúc giao diện (Reduced Motion mode)');
+      }
+      return;
+    }
+
+    // Close matrix overlay if user explicitly triggers rebuild
+    const matrixEl = document.getElementById('matrixCanvas');
+    if (mode === 'full' && matrixEl && matrixEl.classList.contains('active') && typeof toggleMatrix === 'function') {
+      toggleMatrix();
+    }
+
+    // Snap any active animation cleanly before reading true target rects
+    completeSwarmRebuild(false, { silent: true });
+
+    if (mode === 'full') {
+      clearPendingClasses();
+    }
+
+    // Force layout flush before sampling target bounding rects
+    void document.body.getBoundingClientRect();
+
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const visibleShells = [];
+    document.querySelectorAll(SHELL_SELECTOR).forEach(sh => {
+      const r = sh.getBoundingClientRect();
+      if (r.bottom > -80 && r.top < vh + 80 && r.width > 0 && r.height > 0) {
+        visibleShells.push(sh);
+      }
+    });
+
+    const candidatePieces = [];
+    document.querySelectorAll(PIECE_SELECTORS).forEach(el => {
+      if (el.classList.contains('swarm-scroll-pending')) return;
+      const r = el.getBoundingClientRect();
+      if (r.bottom > -90 && r.top < vh + 90 && r.width > 0 && r.height > 0) {
+        candidatePieces.push({ el, rect: r });
+      }
+    });
+
+    if (candidatePieces.length === 0) return;
+
+    const isInit = mode === 'init';
+    const disperseEnd = isInit ? 0 : 460;
+    const flockEnd = isInit ? 340 : 1080;
+    const assembleSpan = clamp(candidatePieces.length * (isInit ? 24 : 22), 280, isInit ? 640 : 760);
+    const pieceDuration = isInit ? 430 : 460;
+    const totalEnd = flockEnd + assembleSpan + pieceDuration;
+
+    const cx = vw * 0.5;
+    const cy = vh * 0.45;
+    const isMobile = vw < 720;
+
+    const pieces = candidatePieces.map(({ el, rect }, idx) => {
+      const pcx = rect.left + rect.width * 0.5;
+      const pcy = rect.top + rect.height * 0.5;
+      const rawAngle = Math.atan2(pcy - cy, pcx - cx);
+      const angle = rawAngle + 0.42 + (Math.random() - 0.5) * 0.9;
+      const areaRatio = (rect.width * rect.height) / Math.max(vw * vh, 1);
+      const weight = clamp(1 - areaRatio * 2.4, 0.36, 1);
+      const baseRadius = isMobile ? 52 : 98;
+      const randRadius = isMobile ? 58 : 122;
+      const dist = (baseRadius + Math.random() * randRadius) * weight;
+
+      const maxDx = vw * (isMobile ? 0.24 : 0.34);
+      const maxDy = vh * 0.32;
+      const dx = clamp(Math.cos(angle) * dist, -maxDx, maxDx);
+      const dy = clamp(Math.sin(angle) * dist, -maxDy, maxDy);
+      const rot = (Math.random() - 0.5) * (rect.width < 190 ? 20 : 8);
+      const scale = 0.78 + Math.random() * 0.16;
+
+      const vOrder = clamp((rect.top + rect.height * 0.3) / Math.max(vh, 1), 0, 1);
+      const hOrder = clamp(pcx / Math.max(vw, 1), 0, 1);
+      const rankFrac = idx / Math.max(candidatePieces.length - 1, 1);
+      const orderFrac = clamp(vOrder * 0.6 + hOrder * 0.2 + rankFrac * 0.2, 0, 1);
+
+      const assembleStart = flockEnd + orderFrac * assembleSpan;
+      const assembleEnd = assembleStart + pieceDuration;
+
+      return {
+        el,
+        docRect: {
+          left: rect.left + scrollX,
+          top: rect.top + scrollY,
+          width: rect.width,
+          height: rect.height
+        },
+        scatter: { dx, dy, rot, scale },
+        hoverSnap: null,
+        phase: Math.random() * Math.PI * 2,
+        assembleStart,
+        assembleEnd,
+        locked: false,
+        accentColor: idx % 3 === 1 ? '#A371F7' : '#4FD1C5'
+      };
+    });
+
+    // Build particle swarm
+    const targetCount = isMobile ? 190 : 300;
+    const perimeters = pieces.map(p => Math.max(40, p.docRect.width + p.docRect.height));
+    const totalPerim = perimeters.reduce((a, b) => a + b, 0) || 1;
+    const boundPool = Math.floor(targetCount * 0.8);
+    const particles = [];
+
+    for (let i = 0; i < pieces.length; i++) {
+      const piece = pieces[i];
+      const alloc = Math.max(3, Math.round((perimeters[i] / totalPerim) * boundPool));
+      for (let j = 0; j < alloc; j++) {
+        const anchor = samplePerimeterAnchor();
+        let sx, sy, vx, vy;
+
+        if (isInit) {
+          // Spawn sweeping in from edges and across viewport
+          sx = (Math.random() * 1.16 - 0.08) * vw;
+          sy = (Math.random() * 1.16 - 0.08) * vh;
+          const ang = Math.atan2(cy - sy, cx - sx) + 0.7;
+          const spd = 2.6 + Math.random() * 3.4;
+          vx = Math.cos(ang) * spd;
+          vy = Math.sin(ang) * spd;
+        } else {
+          const rx = piece.docRect.left - scrollX;
+          const ry = piece.docRect.top - scrollY;
+          sx = rx + anchor.u * piece.docRect.width;
+          sy = ry + anchor.v * piece.docRect.height;
+          const burstAng = Math.atan2(sy - cy, sx - cx) + (Math.random() - 0.5) * 1.3 + 0.35;
+          const spd = 2.8 + Math.random() * 5.2;
+          vx = Math.cos(burstAng) * spd;
+          vy = Math.sin(burstAng) * spd;
+        }
+
+        const rollKind = Math.random();
+        const kind = rollKind < 0.2 ? 'glyph' : rollKind < 0.38 ? 'welder' : 'boid';
+
+        particles.push({
+          x: sx,
+          y: sy,
+          vx,
+          vy,
+          trail: [],
+          size: kind === 'welder' ? 2.6 + Math.random() * 1.1 : 1.7 + Math.random() * 1.3,
+          color: SWARM_COLORS[Math.floor(Math.random() * SWARM_COLORS.length)],
+          kind,
+          glyph: CODE_GLYPHS[Math.floor(Math.random() * CODE_GLYPHS.length)],
+          pieceIdx: i,
+          anchorU: anchor.u,
+          anchorV: anchor.v,
+          homingOffset: Math.random() * 110,
+          phase: Math.random() * Math.PI * 2,
+          welded: false
+        });
+      }
+    }
+
+    // Scout particles for sweeping mesh depth
+    const scoutCount = Math.max(36, targetCount - particles.length);
+    for (let s = 0; s < scoutCount; s++) {
+      const sx = Math.random() * vw;
+      const sy = Math.random() * vh;
+      const ang = Math.random() * Math.PI * 2;
+      const spd = 2.2 + Math.random() * 3.0;
+      particles.push({
+        x: sx,
+        y: sy,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd,
+        trail: [],
+        size: 1.6 + Math.random() * 1.2,
+        color: s % 2 === 0 ? '#4FD1C5' : '#A371F7',
+        kind: s % 4 === 0 ? 'glyph' : 'boid',
+        glyph: CODE_GLYPHS[s % CODE_GLYPHS.length],
+        pieceIdx: -1,
+        anchorU: 0.5,
+        anchorV: 0.5,
+        homingOffset: 0,
+        phase: Math.random() * Math.PI * 2,
+        welded: false
+      });
+    }
+
+    // Apply initial DOM ghost & floating states
+    visibleShells.forEach(sh => sh.classList.add('swarm-shell-ghost'));
+    pieces.forEach(p => {
+      p.el.classList.remove('swarm-locked');
+      p.el.classList.add('swarm-piece-floating');
+      if (isInit) {
+        const tx = p.scatter.dx * 0.65;
+        const ty = p.scatter.dy * 0.65;
+        p.el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) rotate(${(p.scatter.rot * 0.65).toFixed(2)}deg) scale(${p.scatter.scale.toFixed(3)})`;
+        p.el.style.opacity = '0';
+      }
+    });
+
+    swarmState.active = true;
+    swarmState.mode = mode;
+    swarmState.startTime = performance.now();
+    swarmState.disperseEnd = disperseEnd;
+    swarmState.flockEnd = flockEnd;
+    swarmState.totalEnd = totalEnd;
+    swarmState.pieces = pieces;
+    swarmState.shells = visibleShells;
+    swarmState.particles = particles;
+    swarmState.lockedCount = 0;
+
+    document.body.classList.add('swarm-active');
+    setButtonRebuilding(true);
+    showHud(
+      isInit ? 'SWARM::ASSEMBLE' : 'SWARM::DISPERSE',
+      `Nodes: 0/${pieces.length} · Agents: ${particles.length}`,
+      4,
+      false
+    );
+
+    ensureLoopRunning();
+  }
+
+  function completeSwarmRebuild(skipped = false, { silent = false } = {}) {
+    const wasActive = swarmState.active;
+    const totalPieces = swarmState.pieces.length;
+    const elapsedSec = ((performance.now() - swarmState.startTime) / 1000).toFixed(2);
+
+    swarmState.active = false;
+    swarmState.pieces = [];
+    swarmState.shells = [];
+    swarmState.particles = [];
+    swarmState.lockedCount = 0;
+
+    document.body.classList.remove('swarm-active');
+    setButtonRebuilding(false);
+    restoreScrambledText();
+    resetAllPieceStyles();
+
+    if (!silent && wasActive) {
+      showHud(
+        skipped ? 'SWARM::SKIPPED' : 'SWARM::REBUILT ✓',
+        `Nodes: ${totalPieces}/${totalPieces} · ${elapsedSec}s`,
+        100,
+        true
+      );
+      scheduleHudHide(skipped ? 900 : 2000);
+    }
+  }
+
+  function spawnSectionBurst(sectionEl, pendingPieces) {
+    if (!sectionEl || pendingPieces.length === 0) return;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const now = performance.now();
+
+    // Batch class removal and layout reads before writing transforms
+    pendingPieces.forEach(el => el.classList.remove('swarm-scroll-pending'));
+    const rects = pendingPieces.map(el => el.getBoundingClientRect());
+    const secRect = sectionEl.getBoundingClientRect();
+
+    const mapped = pendingPieces.map((el, idx) => {
+      const r = rects[idx];
+      const offsetY = 26 + Math.random() * 24;
+      const offsetX = (Math.random() - 0.5) * 38;
+      const rot = (Math.random() - 0.5) * (r.width < 180 ? 12 : 4);
+      el.classList.add('swarm-piece-floating');
+      el.style.transform = `translate3d(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px, 0) rotate(${rot.toFixed(2)}deg) scale(0.92)`;
+      el.style.opacity = '0';
+
+      return {
+        el,
+        docRect: {
+          left: r.left + scrollX,
+          top: r.top + scrollY,
+          width: r.width,
+          height: r.height
+        },
+        dx: offsetX,
+        dy: offsetY,
+        rot,
+        delay: idx * 32,
+        duration: 460,
+        locked: false
+      };
+    });
+
+    const burstCount = clamp(mapped.length * 4 + 14, 24, 52);
+    const burstParticles = [];
+    for (let i = 0; i < burstCount; i++) {
+      const targetPiece = mapped[i % mapped.length];
+      const anchor = samplePerimeterAnchor();
+      const sx = secRect.left + Math.random() * secRect.width;
+      const sy = secRect.top + Math.random() * secRect.height + 40;
+      burstParticles.push({
+        x: sx,
+        y: sy,
+        vx: (Math.random() - 0.5) * 4,
+        vy: -1.5 - Math.random() * 2.5,
+        trail: [],
+        size: 1.6 + Math.random() * 1.4,
+        color: SWARM_COLORS[i % 3],
+        kind: i % 5 === 0 ? 'glyph' : 'boid',
+        glyph: CODE_GLYPHS[i % CODE_GLYPHS.length],
+        targetPiece,
+        anchorU: anchor.u,
+        anchorV: anchor.v
+      });
+    }
+
+    sectionBursts.push({
+      startTime: now,
+      maxDuration: mapped[mapped.length - 1].delay + 540,
+      pieces: mapped,
+      particles: burstParticles
+    });
+
+    ensureLoopRunning();
+  }
+
+  function initScrollReveal() {
+    if (prefersReducedMotion()) return;
+
+    const targets = document.querySelectorAll(PIECE_SELECTORS);
+    const hashId = window.location.hash ? window.location.hash.slice(1) : '';
+    const hashEl = hashId ? document.getElementById(hashId) : null;
+
+    targets.forEach(el => {
+      if (hashEl && hashEl.contains(el)) return;
+      const r = el.getBoundingClientRect();
+      if (r.top > vh + 60) {
+        el.classList.add('swarm-scroll-pending');
+      }
+    });
+
+    const sections = document.querySelectorAll('section.section, footer');
+    if ('IntersectionObserver' in window) {
+      scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const container = entry.target;
+          const pending = container.matches(PIECE_SELECTORS)
+            ? (container.classList.contains('swarm-scroll-pending') ? [container] : [])
+            : Array.from(container.querySelectorAll('.swarm-scroll-pending'));
+
+          if (pending.length > 0 && !swarmState.active) {
+            spawnSectionBurst(container, pending);
+          } else if (pending.length > 0) {
+            pending.forEach(el => el.classList.remove('swarm-scroll-pending'));
+          }
+          scrollObserver.unobserve(container);
+        });
+      }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+      sections.forEach(sec => scrollObserver.observe(sec));
+    } else {
+      clearPendingClasses();
+    }
+
+    // Safety sweep on scroll so nothing above viewport ever stays hidden
+    window.addEventListener('scroll', () => {
+      const pendingEls = document.querySelectorAll('.swarm-scroll-pending');
+      if (pendingEls.length === 0) return;
+      pendingEls.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.98) {
+          el.classList.remove('swarm-scroll-pending');
+        }
+      });
+    }, { passive: true });
+  }
+
+  function drawSpatialMesh(particles, maxDist, maxAlpha, maxLinksPerNode) {
+    if (particles.length < 2) return;
+    const cellSize = maxDist;
+    const grid = new Map();
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const gx = Math.floor(p.x / cellSize);
+      const gy = Math.floor(p.y / cellSize);
+      const key = (gx + 512) * 2048 + (gy + 512);
+      let bucket = grid.get(key);
+      if (!bucket) {
+        bucket = [];
+        grid.set(key, bucket);
+      }
+      bucket.push(i);
+    }
+
+    const maxDistSq = maxDist * maxDist;
+    sCtx.lineWidth = 0.8;
+
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+      const gx = Math.floor(a.x / cellSize);
+      const gy = Math.floor(a.y / cellSize);
+      let links = 0;
+
+      for (let ox = 0; ox <= 1 && links < maxLinksPerNode; ox++) {
+        for (let oy = -1; oy <= 1 && links < maxLinksPerNode; oy++) {
+          if (ox === 0 && oy < 0) continue;
+          const key = (gx + ox + 512) * 2048 + (gy + oy + 512);
+          const bucket = grid.get(key);
+          if (!bucket) continue;
+
+          for (let b = 0; b < bucket.length && links < maxLinksPerNode; b++) {
+            const j = bucket[b];
+            if (j <= i) continue;
+            const nb = particles[j];
+            const dx = nb.x - a.x;
+            const dy = nb.y - a.y;
+            const dSq = dx * dx + dy * dy;
+            if (dSq < maxDistSq && dSq > 4) {
+              const alpha = (1 - Math.sqrt(dSq) / maxDist) * maxAlpha;
+              sCtx.strokeStyle = a.color === '#A371F7' || nb.color === '#A371F7'
+                ? `rgba(163, 113, 247, ${alpha.toFixed(3)})`
+                : `rgba(79, 209, 197, ${alpha.toFixed(3)})`;
+              sCtx.beginPath();
+              sCtx.moveTo(a.x, a.y);
+              sCtx.lineTo(nb.x, nb.y);
+              sCtx.stroke();
+              links++;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function drawParticle(p, alphaScale = 1) {
+    // Trail
+    if (p.trail && p.trail.length > 1) {
+      sCtx.beginPath();
+      sCtx.moveTo(p.trail[0].x, p.trail[0].y);
+      for (let t = 1; t < p.trail.length; t++) {
+        sCtx.lineTo(p.trail[t].x, p.trail[t].y);
+      }
+      sCtx.lineTo(p.x, p.y);
+      sCtx.strokeStyle = p.color;
+      sCtx.globalAlpha = 0.28 * alphaScale;
+      sCtx.lineWidth = Math.max(0.8, p.size * 0.55);
+      sCtx.stroke();
+    }
+
+    sCtx.globalAlpha = (p.alpha !== undefined ? p.alpha : 0.9) * alphaScale;
+    sCtx.fillStyle = p.color;
+
+    if (p.kind === 'glyph') {
+      sCtx.font = '600 10px "JetBrains Mono", monospace';
+      sCtx.fillText(p.glyph, p.x - 3, p.y + 3);
+    } else if (p.kind === 'welder') {
+      sCtx.beginPath();
+      sCtx.arc(p.x, p.y, p.size * 1.45, 0, Math.PI * 2);
+      sCtx.globalAlpha = 0.22 * alphaScale;
+      sCtx.fill();
+      sCtx.globalAlpha = 0.95 * alphaScale;
+      sCtx.beginPath();
+      sCtx.arc(p.x, p.y, p.size * 0.72, 0, Math.PI * 2);
+      sCtx.fill();
+    } else {
+      // Directional boid shard
+      const ang = Math.atan2(p.vy, p.vx);
+      const len = p.size * 1.8;
+      sCtx.save();
+      sCtx.translate(p.x, p.y);
+      sCtx.rotate(ang);
+      sCtx.beginPath();
+      sCtx.moveTo(len, 0);
+      sCtx.lineTo(-len * 0.7, p.size * 0.65);
+      sCtx.lineTo(-len * 0.35, 0);
+      sCtx.lineTo(-len * 0.7, -p.size * 0.65);
+      sCtx.closePath();
+      sCtx.fill();
+      sCtx.restore();
+    }
+    sCtx.globalAlpha = 1;
+  }
+
+  function drawBlueprintBrackets(left, top, w, h, alpha, color) {
+    const len = Math.min(11, w * 0.22, h * 0.28);
+    if (len < 3) return;
+    sCtx.strokeStyle = color;
+    sCtx.globalAlpha = alpha;
+    sCtx.lineWidth = 1.25;
+    sCtx.beginPath();
+    // Top-left
+    sCtx.moveTo(left, top + len); sCtx.lineTo(left, top); sCtx.lineTo(left + len, top);
+    // Top-right
+    sCtx.moveTo(left + w - len, top); sCtx.lineTo(left + w, top); sCtx.lineTo(left + w, top + len);
+    // Bottom-right
+    sCtx.moveTo(left + w, top + h - len); sCtx.lineTo(left + w, top + h); sCtx.lineTo(left + w - len, top + h);
+    // Bottom-left
+    sCtx.moveTo(left + len, top + h); sCtx.lineTo(left, top + h); sCtx.lineTo(left, top + h - len);
+    sCtx.stroke();
+    sCtx.globalAlpha = 1;
+  }
+
+  function tickSwarm(now) {
+    if (document.hidden) {
+      rafId = null;
+      return;
+    }
+
+    if (isOverlayBlocking()) {
+      if (swarmState.active) {
+        completeSwarmRebuild(false, { silent: true });
+      }
+      sCtx.clearRect(0, 0, vw, vh);
+      rafId = requestAnimationFrame(tickSwarm);
+      return;
+    }
+
+    const dtSec = Math.min(0.05, Math.max(0.004, (now - lastFrameTime) / 1000));
+    const dt = dtSec * 60; // Normalized 60fps step
+    lastFrameTime = now;
+
+    sCtx.clearRect(0, 0, vw, vh);
+
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const cx = vw * 0.5;
+    const cy = vh * 0.45;
+
+    // 1. Active Full / Init Swarm Rebuild
+    if (swarmState.active) {
+      const elapsed = now - swarmState.startTime;
+      const { disperseEnd, flockEnd, totalEnd, pieces, particles, mode } = swarmState;
+
+      // Update DOM pieces
+      for (let i = 0; i < pieces.length; i++) {
+        const piece = pieces[i];
+        if (piece.locked) continue;
+
+        if (mode === 'full' && elapsed < disperseEnd) {
+          const p = easeOutCubic(elapsed / disperseEnd);
+          const tx = piece.scatter.dx * p;
+          const ty = piece.scatter.dy * p;
+          const tr = piece.scatter.rot * p;
+          const ts = 1 + (piece.scatter.scale - 1) * p;
+          const op = 1 - 0.58 * p;
+          piece.hoverSnap = { tx, ty, tr, ts, op };
+          piece.el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) rotate(${tr.toFixed(2)}deg) scale(${ts.toFixed(3)})`;
+          piece.el.style.opacity = op.toFixed(3);
+        } else if (elapsed < piece.assembleStart) {
+          const baseFactor = mode === 'init' ? 0.65 : 1;
+          const wobbleX = Math.sin(elapsed * 0.0055 + piece.phase) * 7;
+          const wobbleY = Math.cos(elapsed * 0.0048 + piece.phase * 1.3) * 7;
+          const wobbleR = Math.sin(elapsed * 0.0042 + piece.phase) * 1.8;
+          const tx = piece.scatter.dx * baseFactor + wobbleX;
+          const ty = piece.scatter.dy * baseFactor + wobbleY;
+          const tr = piece.scatter.rot * baseFactor + wobbleR;
+          const ts = piece.scatter.scale;
+          const op = mode === 'init' ? clamp(elapsed / 260, 0, 0.44) : 0.42;
+          piece.hoverSnap = { tx, ty, tr, ts, op };
+          piece.el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) rotate(${tr.toFixed(2)}deg) scale(${ts.toFixed(3)})`;
+          piece.el.style.opacity = op.toFixed(3);
+        } else if (elapsed < piece.assembleEnd) {
+          const snap = piece.hoverSnap || {
+            tx: piece.scatter.dx,
+            ty: piece.scatter.dy,
+            tr: piece.scatter.rot,
+            ts: piece.scatter.scale,
+            op: 0.42
+          };
+          const u = clamp((elapsed - piece.assembleStart) / (piece.assembleEnd - piece.assembleStart), 0, 1);
+          const e = easeOutBack(u, 1.16);
+          const inv = 1 - e;
+          const tx = snap.tx * inv;
+          const ty = snap.ty * inv;
+          const tr = snap.tr * inv;
+          const ts = 1 + (snap.ts - 1) * inv;
+          const op = snap.op + (1 - snap.op) * clamp(u * 1.35, 0, 1);
+
+          piece.el.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0) rotate(${tr.toFixed(2)}deg) scale(${ts.toFixed(3)})`;
+          piece.el.style.opacity = op.toFixed(3);
+
+          // Draw targeting blueprint brackets
+          const vxRect = piece.docRect.left - scrollX;
+          const vyRect = piece.docRect.top - scrollY;
+          drawBlueprintBrackets(vxRect, vyRect, piece.docRect.width, piece.docRect.height, (1 - u) * 0.65, piece.accentColor);
+        } else {
+          // Lock into final place
+          piece.locked = true;
+          swarmState.lockedCount++;
+          piece.el.style.transform = '';
+          piece.el.style.opacity = '';
+          piece.el.classList.remove('swarm-piece-floating');
+          piece.el.classList.add('swarm-locked');
+          const elRef = piece.el;
+          setTimeout(() => elRef.classList.remove('swarm-locked'), 600);
+
+          spawnLockEffects(piece.docRect, piece.accentColor);
+          if (piece.el.classList.contains('hero-intro')) {
+            scrambleDecode(document.getElementById('heroName'));
+          }
+        }
+      }
+
+      // Draw pre-assemble blueprint reticles
+      for (let i = 0; i < pieces.length; i++) {
+        const piece = pieces[i];
+        if (!piece.locked && elapsed >= piece.assembleStart - 220 && elapsed < piece.assembleStart) {
+          const preAlpha = clamp((elapsed - (piece.assembleStart - 220)) / 220, 0, 1) * 0.45;
+          drawBlueprintBrackets(
+            piece.docRect.left - scrollX,
+            piece.docRect.top - scrollY,
+            piece.docRect.width,
+            piece.docRect.height,
+            preAlpha,
+            piece.accentColor
+          );
+        }
+      }
+
+      // Update & draw swarm particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 5) p.trail.shift();
+
+        const piece = p.pieceIdx >= 0 ? pieces[p.pieceIdx] : null;
+        const homingStart = piece ? piece.assembleStart - 180 + p.homingOffset : Infinity;
+
+        if (piece && elapsed >= homingStart) {
+          const targetX = (piece.docRect.left - scrollX) + p.anchorU * piece.docRect.width;
+          const targetY = (piece.docRect.top - scrollY) + p.anchorV * piece.docRect.height;
+          const homingSpan = Math.max(160, piece.assembleEnd - homingStart);
+          const hProg = clamp((elapsed - homingStart) / homingSpan, 0, 1);
+
+          const dx = targetX - p.x;
+          const dy = targetY - p.y;
+          const pull = 0.032 + hProg * hProg * 0.24;
+          const damp = 0.88 - hProg * 0.16;
+
+          p.vx = p.vx * damp + dx * pull * dt;
+          p.vy = p.vy * damp + dy * pull * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+
+          if (piece.locked && !p.welded && Math.hypot(dx, dy) < 10) {
+            p.welded = true;
+          }
+        } else {
+          // Curl vortex flocking + mouse swirl
+          const field = sampleCurlField(p.x, p.y, elapsed, cx, cy);
+          p.vx += field.ax * dt;
+          p.vy += field.ay * dt;
+
+          // Gentle attraction back toward screen center if straying outside viewport
+          if (p.x < 20 || p.x > vw - 20 || p.y < 20 || p.y > vh - 20) {
+            p.vx += (cx - p.x) * 0.0022 * dt;
+            p.vy += (cy - p.y) * 0.0022 * dt;
+          }
+
+          if (pointer.active) {
+            const mdx = p.x - pointer.x;
+            const mdy = p.y - pointer.y;
+            const mDist = Math.hypot(mdx, mdy);
+            if (mDist < 150 && mDist > 2) {
+              const force = (1 - mDist / 150) * 0.65;
+              p.vx += ((mdx / mDist) * force - (mdy / mDist) * force * 0.6) * dt;
+              p.vy += ((mdy / mDist) * force + (mdx / mDist) * force * 0.6) * dt;
+            }
+          }
+
+          // Speed cap & mild damping
+          p.vx *= 0.965;
+          p.vy *= 0.965;
+          const spd = Math.hypot(p.vx, p.vy);
+          if (spd > 8.5) {
+            p.vx = (p.vx / spd) * 8.5;
+            p.vy = (p.vy / spd) * 8.5;
+          } else if (spd < 1.3) {
+            p.vx += Math.cos(elapsed * 0.01 + p.phase) * 0.22 * dt;
+            p.vy += Math.sin(elapsed * 0.01 + p.phase) * 0.22 * dt;
+          }
+
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+        }
+      }
+
+      // Synaptic mesh + particles
+      drawSpatialMesh(particles, vw < 720 ? 70 : 86, 0.28, 3);
+
+      // Fade particles out smoothly right as everything finishes locking
+      const tailFade = elapsed > totalEnd - 120
+        ? clamp(1 - (elapsed - (totalEnd - 120)) / 380, 0, 1)
+        : 1;
+      for (let i = 0; i < particles.length; i++) {
+        drawParticle(particles[i], tailFade);
+      }
+
+      // Update HUD
+      let stageLabel = 'SWARM::FLOCKING';
+      if (mode === 'full' && elapsed < disperseEnd) stageLabel = 'SWARM::DISPERSE';
+      else if (elapsed >= flockEnd) stageLabel = `SWARM::REBUILD ${Math.round((swarmState.lockedCount / pieces.length) * 100)}%`;
+      else if (mode === 'init') stageLabel = 'SWARM::ASSEMBLE';
+
+      const pct = clamp((elapsed / totalEnd) * 100, 4, 100);
+      showHud(
+        stageLabel,
+        `Nodes: ${swarmState.lockedCount}/${pieces.length} · Agents: ${particles.length}`,
+        pct,
+        false
+      );
+
+      if (swarmState.lockedCount === pieces.length && elapsed >= totalEnd + 220) {
+        completeSwarmRebuild(false, { silent: false });
+      }
+    }
+
+    // 2. Localized Scroll Section Bursts
+    for (let b = sectionBursts.length - 1; b >= 0; b--) {
+      const burst = sectionBursts[b];
+      const bElapsed = now - burst.startTime;
+
+      for (let i = 0; i < burst.pieces.length; i++) {
+        const bp = burst.pieces[i];
+        if (bp.locked) continue;
+        const localT = clamp((bElapsed - bp.delay) / bp.duration, 0, 1);
+        if (localT >= 1) {
+          bp.locked = true;
+          bp.el.style.transform = '';
+          bp.el.style.opacity = '';
+          bp.el.classList.remove('swarm-piece-floating');
+          bp.el.classList.add('swarm-locked');
+          const elRef = bp.el;
+          setTimeout(() => elRef.classList.remove('swarm-locked'), 550);
+          spawnLockEffects(bp.docRect, i % 2 === 0 ? '#4FD1C5' : '#A371F7');
+        } else {
+          const e = easeOutBack(localT, 1.12);
+          const inv = 1 - e;
+          bp.el.style.transform = `translate3d(${(bp.dx * inv).toFixed(1)}px, ${(bp.dy * inv).toFixed(1)}px, 0) rotate(${(bp.rot * inv).toFixed(2)}deg) scale(${(1 - 0.08 * inv).toFixed(3)})`;
+          bp.el.style.opacity = clamp(localT * 1.4, 0, 1).toFixed(3);
+        }
+      }
+
+      const fade = clamp(1 - Math.max(0, bElapsed - (burst.maxDuration - 240)) / 240, 0, 1);
+      for (let i = 0; i < burst.particles.length; i++) {
+        const p = burst.particles[i];
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > 4) p.trail.shift();
+
+        const tp = p.targetPiece;
+        const tx = (tp.docRect.left - scrollX) + p.anchorU * tp.docRect.width;
+        const ty = (tp.docRect.top - scrollY) + p.anchorV * tp.docRect.height;
+        p.vx = p.vx * 0.8 + (tx - p.x) * 0.14 * dt;
+        p.vy = p.vy * 0.8 + (ty - p.y) * 0.14 * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        drawParticle(p, fade);
+      }
+
+      if (bElapsed > burst.maxDuration) {
+        sectionBursts.splice(b, 1);
+      }
+    }
+
+    // 3. Shockwaves & Weld Sparks
+    for (let i = shockwaves.length - 1; i >= 0; i--) {
+      const sw = shockwaves[i];
+      const age = now - sw.born;
+      if (age >= sw.duration) {
+        shockwaves.splice(i, 1);
+        continue;
+      }
+      const p = easeOutCubic(age / sw.duration);
+      const pad = p * 12;
+      const vxRect = sw.docLeft - scrollX - pad;
+      const vyRect = sw.docTop - scrollY - pad;
+      sCtx.strokeStyle = sw.color;
+      sCtx.globalAlpha = (1 - p) * 0.65;
+      sCtx.lineWidth = 1.4;
+      sCtx.strokeRect(vxRect, vyRect, sw.width + pad * 2, sw.height + pad * 2);
+      sCtx.globalAlpha = 1;
+    }
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const sp = sparks[i];
+      sp.life += dt;
+      if (sp.life >= sp.maxLife) {
+        sparks.splice(i, 1);
+        continue;
+      }
+      sp.x += sp.vx * dt;
+      sp.y += sp.vy * dt;
+      sp.vx *= 0.94;
+      sp.vy *= 0.94;
+      sCtx.fillStyle = sp.color;
+      sCtx.globalAlpha = 1 - sp.life / sp.maxLife;
+      sCtx.beginPath();
+      sCtx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
+      sCtx.fill();
+      sCtx.globalAlpha = 1;
+    }
+
+    // 4. Subtle Ambient Background Swarm (when idle)
+    if (!swarmState.active && ambientEnabled && !prefersReducedMotion()) {
+      for (let i = 0; i < ambientParticles.length; i++) {
+        const p = ambientParticles[i];
+        const driftX = Math.sin(now * 0.0007 + p.phase) * 0.015;
+        const driftY = Math.cos(now * 0.0006 + p.phase * 1.2) * 0.015;
+        p.vx += driftX * dt;
+        p.vy += driftY * dt;
+
+        if (pointer.active) {
+          const mdx = p.x - pointer.x;
+          const mdy = p.y - pointer.y;
+          const mDist = Math.hypot(mdx, mdy);
+          if (mDist < 120 && mDist > 2) {
+            const f = (1 - mDist / 120) * 0.14;
+            p.vx += ((mdx / mDist) * f - (mdy / mDist) * f * 0.5) * dt;
+            p.vy += ((mdy / mDist) * f + (mdx / mDist) * f * 0.5) * dt;
+          }
+        }
+
+        const spd = Math.hypot(p.vx, p.vy);
+        if (spd > 1.25) {
+          p.vx = (p.vx / spd) * 1.25;
+          p.vy = (p.vy / spd) * 1.25;
+        }
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+
+        if (p.x < -15) p.x = vw + 15;
+        else if (p.x > vw + 15) p.x = -15;
+        if (p.y < -15) p.y = vh + 15;
+        else if (p.y > vh + 15) p.y = -15;
+      }
+
+      drawSpatialMesh(ambientParticles, 98, 0.12, 2);
+      for (let i = 0; i < ambientParticles.length; i++) {
+        drawParticle(ambientParticles[i], 1);
+      }
+    }
+
+    const keepRunning = swarmState.active || sectionBursts.length > 0 || shockwaves.length > 0 || sparks.length > 0 || (ambientEnabled && !prefersReducedMotion());
+    if (keepRunning) {
+      rafId = requestAnimationFrame(tickSwarm);
+    } else {
+      sCtx.clearRect(0, 0, vw, vh);
+      rafId = null;
+    }
+  }
+
+  // Global entry points
+  window.triggerSwarmRebuild = function () {
+    startSwarmRebuild({ mode: 'full' });
+  };
+
+  window.completeSwarmRebuild = function (skipped = false) {
+    completeSwarmRebuild(skipped, { silent: false });
+  };
+
+  window.toggleSwarmAmbient = function () {
+    ambientEnabled = !ambientEnabled;
+    localStorage.setItem('nmk_swarm_ambient', String(ambientEnabled));
+    if (ambientEnabled) {
+      if (ambientParticles.length === 0) initAmbientParticles();
+      ensureLoopRunning();
+    }
+    return ambientEnabled;
+  };
+
+  // Pointer & keyboard listeners
+  window.addEventListener('pointermove', (e) => {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    pointer.active = true;
+  }, { passive: true });
+
+  window.addEventListener('pointerleave', () => {
+    pointer.active = false;
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && swarmState.active) {
+      completeSwarmRebuild(true, { silent: false });
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    resizeSwarmCanvas();
+    if (ambientEnabled && ambientParticles.length === 0) {
+      initAmbientParticles();
+    }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && (swarmState.active || (ambientEnabled && !prefersReducedMotion()))) {
+      ensureLoopRunning();
+    }
+  });
+
+  // Boot Swarm Engine right after DOM parses
+  function bootSwarm() {
+    resizeSwarmCanvas();
+    initAmbientParticles();
+    initScrollReveal();
+
+    if (!prefersReducedMotion()) {
+      startSwarmRebuild({ mode: 'init' });
+    } else if (ambientEnabled) {
+      ensureLoopRunning();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootSwarm);
+  } else {
+    bootSwarm();
+  }
+})();
 </script>
 </body>
 </html>
